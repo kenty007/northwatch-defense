@@ -10,7 +10,12 @@
       "WebFetch(domain:pixabay.com)",
       "WebFetch(domain:coverr.co)",
       "WebFetch(domain:mixkit.co)",
-      "WebFetch(domain:assets.mixkit.co)"
+      "WebFetch(domain:assets.mixkit.co)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(npx -y netlify-cli --version)",
+      "Bash(npx netlify-cli:*)",
+      "WebFetch(domain:www.skydio.com)"
     ]
   }
 }

@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwatch Technologies — The Future of Defense Is Here</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: #027bc6;
+            --dark-1: #000000;
+            --dark-2: #1a1a1a;
+            --dark-3: #22211f;
+            --light-1: #ffffff;
+            --light-2: #f7f7f7;
+            --light-3: #f0f0f0;
+            --sand: #ebe7e0;
+            --text-dark: #22211f;
+            --text-secondary: #4a4947;
+            --text-muted: #6d6c69;
+            --max-w: 1280px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(1rem, 0.90rem + 0.28vw, 1.125rem);
+            line-height: 140%;
+            color: var(--text-dark);
+            background: var(--light-1);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img, video {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h1 {
+            font-size: clamp(3rem, 0.55rem + 6.82vw, 6rem);
+            font-weight: 500;
+            letter-spacing: -2px;
+            line-height: 100%;
+        }
+
+        h2 {
+            font-size: clamp(1.75rem, 0.73rem + 2.84vw, 3rem);
+            font-weight: 500;
+            line-height: 120%;
+        }
+
+        h3 {
+            font-size: clamp(1.375rem, 0.86rem + 1.42vw, 2rem);
+            font-weight: 500;
+            line-height: 120%;
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 clamp(1.25rem, 3vw, 3rem);
+        }
+
+        .section-padding {
+            padding: clamp(4rem, 3rem + 5vw, 8rem) 0;
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.25rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary {
+            background: var(--dark-3);
+            color: #fff;
+            border-color: var(--dark-3);
+        }
+
+        .btn-primary:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark-3);
+            border-color: var(--dark-3);
+        }
+
+        .btn-secondary:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .btn-white {
+            background: #fff;
+            color: var(--dark-3);
+            border-color: #fff;
+        }
+
+        .btn-white:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .btn-outline-white {
+            background: transparent;
+            color: #fff;
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .btn-outline-white:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.25s ease;
+        }
+
+        .btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 0 clamp(1.25rem, 3vw, 3rem);
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .nav.scrolled .nav-logo-text,
+        .nav.scrolled .nav-links a {
+            color: var(--text-dark);
+        }
+
+        .nav.scrolled .nav-cta {
+            background: var(--blue);
+            color: #fff !important;
+            border-color: var(--blue);
+        }
+
+        .nav.scrolled .nav-cta:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-logo-text {
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #fff;
+            transition: color 0.25s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.825rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+            transition: color 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-cta {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            border-radius: 0.25rem;
+            font-size: 0.825rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .mobile-toggle span {
+            width: 22px;
+            height: 1.5px;
+            background: #fff;
+            transition: all 0.25s ease;
+        }
+
+        .nav.scrolled .mobile-toggle span {
+            background: var(--dark-3);
+        }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: var(--dark-1);
+        }
+
+        .hero-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-video-wrap video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .hero-video-wrap video.active {
+            opacity: 0.5;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.3) 100%),
+                linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 30%),
+                linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 25%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 720px;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue);
+            margin-bottom: clamp(1.25rem, 2vw, 2rem);
+        }
+
+        .hero-eyebrow .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--blue);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            color: #fff;
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        .hero-desc {
+            color: rgba(255,255,255,0.65);
+            font-size: clamp(1rem, 0.90rem + 0.28vw, 1.125rem);
+            line-height: 160%;
+            max-width: 540px;
+            margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Video progress pips */
+        .hero-pips {
+            position: absolute;
+            bottom: clamp(2rem, 4vw, 3.5rem);
+            left: clamp(1.25rem, 3vw, 3rem);
+            right: clamp(1.25rem, 3vw, 3rem);
+            z-index: 3;
+            display: flex;
+            gap: 4px;
+        }
+
+        .pip {
+            flex: 1;
+            height: 2px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .pip-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--blue);
+            border-radius: 1px;
+            transition: width 0.1s linear;
+        }
+
+        /* ============================================
+           MARQUEE
+           ============================================ */
+        .marquee {
+            background: var(--dark-3);
+            padding: 1rem 0;
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marqueeScroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .marquee-item .sep {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ============================================
+           MISSION (Light)
+           ============================================ */
+        .mission-section {
+            background: var(--light-1);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 4vw, 5rem);
+            align-items: center;
+        }
+
+        .mission-content .eyebrow {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .mission-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-quote {
+            position: relative;
+            padding-left: 1.25rem;
+            border-left: 2px solid var(--blue);
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .mission-quote cite {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            font-style: normal;
+            color: var(--text-muted);
+        }
+
+        .mission-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shield-graphic {
+            position: relative;
+            width: clamp(250px, 30vw, 380px);
+            height: clamp(250px, 30vw, 380px);
+        }
+
+        .shield-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--light-3);
+            border-radius: 50%;
+            animation: shieldPulse 4s ease-in-out infinite;
+        }
+
+        .shield-ring:nth-child(2) {
+            inset: 15%;
+            animation-delay: 0.5s;
+            border-color: rgba(2,123,198,0.15);
+        }
+
+        .shield-ring:nth-child(3) {
+            inset: 30%;
+            animation-delay: 1s;
+            border-color: rgba(2,123,198,0.25);
+        }
+
+        .shield-core {
+            position: absolute;
+            inset: 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-2);
+            border-radius: 50%;
+        }
+
+        .shield-core svg {
+            width: 40%;
+            height: 40%;
+            color: var(--blue);
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.6; }
+        }
+
+        /* ============================================
+           PRODUCTS (Dark)
+           ============================================ */
+        .products-section {
+            background: var(--dark-3);
+            color: #fff;
+        }
+
+        .products-header {
+            margin-bottom: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        .products-header .eyebrow {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .products-header p {
+            color: rgba(255,255,255,0.55);
+            max-width: 580px;
+            margin-top: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        .product-card {
+            background: var(--dark-3);
+            padding: clamp(1.5rem, 2.5vw, 2.5rem);
+            display: flex;
+            flex-direction: column;
+            transition: background 0.25s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            background: #2a2926;
+        }
+
+        .product-number {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--blue);
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+        }
+
+        .product-icon {
+            width: 48px;
+            height: 48px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.25rem;
+        }
+
+        .product-card h3 {
+            margin-bottom: 0.75rem;
+            font-size: clamp(1.125rem, 0.8rem + 0.8vw, 1.375rem);
+        }
+
+        .product-card p {
+            color: rgba(255,255,255,0.45);
+            font-size: 0.875rem;
+            line-height: 160%;
+            flex: 1;
+            margin-bottom: 1.25rem;
+        }
+
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .product-tag {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 0.25rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .product-arrow {
+            width: 20px;
+            height: 20px;
+            color: rgba(255,255,255,0.3);
+            transition: all 0.25s ease;
+        }
+
+        .product-card:hover .product-arrow {
+            color: var(--blue);
+            transform: translate(3px, -3px);
+        }
+
+        /* ============================================
+           STATS (Sand)
+           ============================================ */
+        .stats-section {
+            background: var(--sand);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(1.5rem, 3vw, 3rem);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 100%;
+            color: var(--dark-3);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           TECHNOLOGY (Light)
+           ============================================ */
+        .tech-section {
+            background: var(--light-2);
+        }
+
+        .tech-header {
+            margin-bottom: clamp(2.5rem, 4vw, 4rem);
+        }
+
+        .tech-header .eyebrow {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .tech-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 4vw, 5rem);
+        }
+
+        .tech-visual {
+            position: relative;
+            background: var(--light-3);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .radar-ring-outer,
+        .radar-ring-mid,
+        .radar-ring-inner {
+            position: absolute;
+            border: 1px solid rgba(2,123,198,0.15);
+            border-radius: 50%;
+        }
+
+        .radar-ring-outer {
+            inset: 0;
+        }
+
+        .radar-ring-mid {
+            inset: 20%;
+        }
+
+        .radar-ring-inner {
+            inset: 40%;
+        }
+
+        .radar-sweep-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, var(--blue), transparent);
+            transform-origin: left center;
+            animation: radarSweep 3s linear infinite;
+        }
+
+        @keyframes radarSweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .radar-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--blue);
+            border-radius: 50%;
+            animation: radarBlink 2s ease-in-out infinite;
+        }
+
+        .radar-dot:nth-child(5) { top: 25%; left: 60%; animation-delay: 0.3s; }
+        .radar-dot:nth-child(6) { top: 65%; left: 30%; animation-delay: 0.8s; }
+        .radar-dot:nth-child(7) { top: 40%; left: 75%; animation-delay: 1.5s; }
+
+        @keyframes radarBlink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .tech-features {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(1.5rem, 2.5vw, 2.5rem);
+        }
+
+        .tech-feature {
+            padding-bottom: clamp(1.5rem, 2.5vw, 2.5rem);
+            border-bottom: 1px solid var(--light-3);
+        }
+
+        .tech-feature:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .tech-feature h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-feature p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 160%;
+        }
+
+        /* ============================================
+           PHILOSOPHY (Dark)
+           ============================================ */
+        .philosophy-section {
+            background: var(--dark-1);
+            color: #fff;
+            text-align: center;
+        }
+
+        .philosophy-text {
+            font-size: clamp(1.5rem, 0.8rem + 2vw, 2.5rem);
+            font-weight: 500;
+            line-height: 140%;
+            max-width: 800px;
+            margin: 0 auto;
+            margin-bottom: 2rem;
+        }
+
+        .philosophy-text strong {
+            color: var(--blue);
+        }
+
+        .philosophy-divider {
+            width: 48px;
+            height: 2px;
+            background: var(--blue);
+            margin: 0 auto 2rem;
+        }
+
+        .philosophy-sub {
+            color: rgba(255,255,255,0.45);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           PARTNERS (Light)
+           ============================================ */
+        .partners-section {
+            background: var(--light-1);
+        }
+
+        .partners-header {
+            margin-bottom: clamp(2rem, 3vw, 3rem);
+        }
+
+        .partners-header .eyebrow {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: var(--light-3);
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        .partner-cell {
+            background: var(--light-1);
+            padding: clamp(1.5rem, 2.5vw, 2.5rem);
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+        }
+
+        .partner-cell:hover {
+            color: var(--blue);
+            background: var(--light-2);
+        }
+
+        /* ============================================
+           CONTACT / CTA (Dark)
+           ============================================ */
+        .cta-section {
+            background: var(--dark-3);
+            color: #fff;
+            text-align: center;
+        }
+
+        .cta-section .eyebrow {
+            color: var(--blue);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: rgba(255,255,255,0.5);
+            max-width: 520px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--dark-1);
+            color: rgba(255,255,255,0.4);
+            padding: clamp(3rem, 5vw, 5rem) 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: clamp(2rem, 3vw, 4rem);
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.875rem;
+            line-height: 160%;
+            margin-top: 1rem;
+            max-width: 300px;
+        }
+
+        .footer-col-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.35);
+            padding: 0.25rem 0;
+            transition: color 0.25s ease;
+        }
+
+        .footer-col a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.3);
+            transition: color 0.25s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #fff;
+        }
+
+        /* ============================================
+           SCROLL REVEAL
+           ============================================ */
+        .reveal {
+            opacity: 0.08;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* stagger children */
+        .reveal-stagger > * {
+            opacity: 0.08;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal-stagger.visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+        .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.08s; }
+        .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.16s; }
+        .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.24s; }
+        .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.32s; }
+        .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.40s; }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .partners-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .tech-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-visual {
+                min-height: 300px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .mission-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mission-visual {
+                order: -1;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ============================================
+           MOBILE NAV OVERLAY
+           ============================================ */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .mobile-nav.open {
+            display: flex;
+        }
+
+        .mobile-nav a {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #fff;
+            transition: color 0.25s ease;
+        }
+
+        .mobile-nav a:hover {
+            color: var(--blue);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="mainNav">
+        <a href="#" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#027bc6" stroke-width="1" fill="none" opacity="0.5"/>
+                <path d="M18 13v10M13 16l5 3 5-3" stroke="#027bc6" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-logo-text">Northwatch</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#products">Products</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#partners">Partners</a></li>
+            <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#products" onclick="closeMobileNav()">Products</a>
+        <a href="#technology" onclick="closeMobileNav()">Technology</a>
+        <a href="#mission" onclick="closeMobileNav()">Mission</a>
+        <a href="#partners" onclick="closeMobileNav()">Partners</a>
+        <a href="#contact" onclick="closeMobileNav()">Contact</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-video-wrap" id="heroVideoWrap">
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/44644/44644-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/23018/23018-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/5436/5436-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/7373/7373-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/26920/26920-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto">
+                <source src="https://assets.mixkit.co/videos/17271/17271-720.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+
+        <div class="container hero-content">
+            <div class="hero-eyebrow eyebrow reveal">
+                <span class="dot"></span>
+                Defense Systems Active
+            </div>
+            <h1 class="reveal">The Future<br>of Defense<br>Is Here.</h1>
+            <p class="hero-desc reveal">Northwatch Technologies builds autonomous defense systems that protect without provocation. The strongest deterrent is an impenetrable shield — not a sharper sword.</p>
+            <div class="hero-actions reveal">
+                <a href="#products" class="btn btn-white">
+                    Explore Products
+                    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="#mission" class="btn btn-outline-white">Our Mission</a>
+            </div>
+        </div>
+
+        <div class="hero-pips" id="heroPips">
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <span class="marquee-item">Autonomous Defense <span class="sep"></span></span>
+            <span class="marquee-item">Perimeter Security <span class="sep"></span></span>
+            <span class="marquee-item">Threat Detection <span class="sep"></span></span>
+            <span class="marquee-item">Counter-UAS <span class="sep"></span></span>
+            <span class="marquee-item">Sensor Fusion <span class="sep"></span></span>
+            <span class="marquee-item">AI-Driven Response <span class="sep"></span></span>
+            <span class="marquee-item">Electronic Warfare <span class="sep"></span></span>
+            <span class="marquee-item">Maritime Shield <span class="sep"></span></span>
+            <span class="marquee-item">Autonomous Defense <span class="sep"></span></span>
+            <span class="marquee-item">Perimeter Security <span class="sep"></span></span>
+            <span class="marquee-item">Threat Detection <span class="sep"></span></span>
+            <span class="marquee-item">Counter-UAS <span class="sep"></span></span>
+            <span class="marquee-item">Sensor Fusion <span class="sep"></span></span>
+            <span class="marquee-item">AI-Driven Response <span class="sep"></span></span>
+            <span class="marquee-item">Electronic Warfare <span class="sep"></span></span>
+            <span class="marquee-item">Maritime Shield <span class="sep"></span></span>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <section class="mission-section section-padding" id="mission">
+        <div class="container">
+            <div class="mission-grid">
+                <div class="mission-content reveal">
+                    <div class="eyebrow">Our Mission</div>
+                    <h2>Defense first.<br>Always.</h2>
+                    <p>We reject the doctrine of preemptive aggression. Northwatch exists to build systems that detect, deter, and neutralize threats — without initiating conflict. Our technology creates defensive superiority so absolute that offense becomes irrelevant.</p>
+                    <blockquote class="mission-quote">
+                        "The supreme art of war is to subdue the enemy without fighting."
+                        <cite>— Sun Tzu</cite>
+                    </blockquote>
+                </div>
+                <div class="mission-visual reveal">
+                    <div class="shield-graphic">
+                        <div class="shield-ring"></div>
+                        <div class="shield-ring"></div>
+                        <div class="shield-ring"></div>
+                        <div class="shield-core">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 2L3 7v6c0 5.25 3.75 10.13 9 11.25C17.25 23.13 21 18.25 21 13V7l-9-5z"/>
+                                <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products-section section-padding" id="products">
+        <div class="container">
+            <div class="products-header reveal">
+                <div class="eyebrow">Defense Technologies</div>
+                <h2>Advanced drone systems<br>for every domain.</h2>
+                <p>Six specialized platforms. One integrated ecosystem. Northwatch drone technologies deliver autonomous capability across logistics, defense, electronic warfare, and maritime operations.</p>
+            </div>
+
+            <div class="products-grid reveal-stagger">
+                <a href="products/payload-transport.html" class="product-card">
+                    <div class="product-number">01</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M24 6l-8 4v8l8 4 8-4V10l-8-4z"/>
+                        <path d="M16 18v6l8 4 8-4v-6"/>
+                        <path d="M24 22v12"/>
+                        <path d="M18 38h12"/>
+                        <path d="M14 40l10 4 10-4"/>
+                    </svg>
+                    <h3>Drone Payload Transportation</h3>
+                    <p>Autonomous logistics and cargo delivery drones engineered for defense supply chains. Heavy-lift capable platforms that ensure rapid resupply across contested environments.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">Logistics</span>
+                        <span class="product-tag">Heavy-Lift</span>
+                        <span class="product-tag">Autonomous Delivery</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+
+                <a href="products/drone-defense.html" class="product-card">
+                    <div class="product-number">02</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M24 4L10 14v16l14 14 14-14V14L24 4z"/>
+                        <path d="M24 12l-8 6v10l8 8 8-8V18l-8-6z" opacity="0.5"/>
+                        <circle cx="24" cy="24" r="4"/>
+                        <path d="M24 20v-4M24 32v-4M20 24h-4M32 24h-4"/>
+                    </svg>
+                    <h3>Drone Defense Technology</h3>
+                    <p>Counter-drone and active aerial defense platforms that detect, track, and neutralize hostile UAS threats. Multi-layered interdiction from early warning through response.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">Counter-UAS</span>
+                        <span class="product-tag">Active Defense</span>
+                        <span class="product-tag">Interdiction</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+
+                <a href="products/jamming-systems.html" class="product-card">
+                    <div class="product-number">03</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M24 8v32"/>
+                        <path d="M18 12c-4 2-8 6-8 12s4 10 8 12"/>
+                        <path d="M30 12c4 2 8 6 8 12s-4 10-8 12"/>
+                        <path d="M14 16c-3 2-6 4-6 8s3 6 6 8" opacity="0.5"/>
+                        <path d="M34 16c3 2 6 4 6 8s-3 6-6 8" opacity="0.5"/>
+                        <circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.6"/>
+                    </svg>
+                    <h3>Drone Jamming Technology</h3>
+                    <p>Electronic warfare and RF countermeasure systems that disrupt hostile communications and navigation. Precision-targeted signal denial across multiple frequency bands.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">Electronic Warfare</span>
+                        <span class="product-tag">RF Denial</span>
+                        <span class="product-tag">SIGINT</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+
+                <a href="products/autonomous-drones.html" class="product-card">
+                    <div class="product-number">04</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="24" cy="20" r="6"/>
+                        <path d="M18 20l-10-4M30 20l10-4"/>
+                        <path d="M18 20l-10 4M30 20l10 4"/>
+                        <circle cx="8" cy="16" r="3" opacity="0.5"/>
+                        <circle cx="40" cy="16" r="3" opacity="0.5"/>
+                        <circle cx="8" cy="24" r="3" opacity="0.5"/>
+                        <circle cx="40" cy="24" r="3" opacity="0.5"/>
+                        <circle cx="24" cy="20" r="2" fill="currentColor" opacity="0.6"/>
+                    </svg>
+                    <h3>Autonomous Drones</h3>
+                    <p>AI-driven autonomous UAVs with swarm intelligence that coordinate multi-vehicle missions without human intervention. Adaptive path planning and decentralized decision-making at machine speed.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">Swarm AI</span>
+                        <span class="product-tag">Autonomous</span>
+                        <span class="product-tag">Multi-Vehicle</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+
+                <a href="products/surveillance-drones.html" class="product-card">
+                    <div class="product-number">05</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <ellipse cx="24" cy="24" rx="18" ry="10"/>
+                        <ellipse cx="24" cy="24" rx="10" ry="6" opacity="0.5"/>
+                        <circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.6"/>
+                        <path d="M24 14v-8"/>
+                        <path d="M18 6h12"/>
+                        <path d="M24 34v8"/>
+                    </svg>
+                    <h3>Surveillance Drones</h3>
+                    <p>ISR platforms equipped with multi-spectrum sensor arrays for persistent intelligence gathering. Thermal, optical, and SAR payloads deliver real-time situational awareness day and night.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">ISR</span>
+                        <span class="product-tag">Multi-Spectrum</span>
+                        <span class="product-tag">Persistent</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+
+                <a href="products/sea-drones.html" class="product-card">
+                    <div class="product-number">06</div>
+                    <svg class="product-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M4 28c4-2 8 2 12 0s8-2 12 0 8 2 12 0"/>
+                        <path d="M4 34c4-2 8 2 12 0s8-2 12 0 8 2 12 0" opacity="0.3"/>
+                        <path d="M14 28V16l10-6 10 6v12"/>
+                        <path d="M24 10v-4"/>
+                        <circle cx="24" cy="20" r="3"/>
+                    </svg>
+                    <h3>Sea Drones</h3>
+                    <p>Unmanned surface and underwater vessels for maritime operations. Autonomous mine countermeasures, anti-submarine warfare, and harbor security with extended endurance.</p>
+                    <div class="product-tags">
+                        <span class="product-tag">Maritime</span>
+                        <span class="product-tag">USV / UUV</span>
+                        <span class="product-tag">Subsurface</span>
+                    </div>
+                    <svg class="product-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section section-padding" id="stats">
+        <div class="container">
+            <div class="stats-grid reveal-stagger">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="340">0</div>
+                    <div class="stat-label">Sites Protected</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="99.7" data-suffix="%" data-decimal="true">0</div>
+                    <div class="stat-label">Threat Detection Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="12" data-suffix="ms">0</div>
+                    <div class="stat-label">Response Latency</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="0">0</div>
+                    <div class="stat-label">Offensive Operations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology -->
+    <section class="tech-section section-padding" id="technology">
+        <div class="container">
+            <div class="tech-header reveal">
+                <div class="eyebrow">Technology</div>
+                <h2>Built to protect,<br>engineered to endure.</h2>
+            </div>
+
+            <div class="tech-layout">
+                <div class="tech-visual reveal">
+                    <div class="radar-container">
+                        <div class="radar-ring-outer"></div>
+                        <div class="radar-ring-mid"></div>
+                        <div class="radar-ring-inner"></div>
+                        <div class="radar-sweep-line"></div>
+                        <div class="radar-dot"></div>
+                        <div class="radar-dot"></div>
+                        <div class="radar-dot"></div>
+                    </div>
+                </div>
+                <div class="tech-features">
+                    <div class="tech-feature reveal">
+                        <h3>Edge AI Processing</h3>
+                        <p>On-device neural networks process sensor data at the edge, eliminating latency and single points of failure. Every node thinks independently while sharing intelligence across the mesh.</p>
+                    </div>
+                    <div class="tech-feature reveal">
+                        <h3>Adaptive Threat Modeling</h3>
+                        <p>Self-evolving algorithms that learn from every encounter. Our systems don't just detect known threats — they anticipate novel attack vectors through adversarial simulation.</p>
+                    </div>
+                    <div class="tech-feature reveal">
+                        <h3>Quantum-Resistant Encryption</h3>
+                        <p>Post-quantum cryptographic protocols protecting all data in transit and at rest. Built for a future where today's encryption standards are obsolete.</p>
+                    </div>
+                    <div class="tech-feature reveal">
+                        <h3>Human-in-the-Loop Doctrine</h3>
+                        <p>Autonomous systems accelerate response time, but human judgment governs every escalatory action. Ethical AI isn't a feature — it's the foundation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="philosophy-section section-padding">
+        <div class="container reveal">
+            <p class="philosophy-text">
+                We don't build weapons of aggression.<br>
+                We build <strong>systems of protection</strong><br>
+                that make aggression futile.
+            </p>
+            <div class="philosophy-divider"></div>
+            <p class="philosophy-sub">
+                Every system we deploy is designed with a single imperative: protect people, infrastructure, and sovereignty without initiating violence. Defense superiority is the ultimate deterrent.
+            </p>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="partners-section section-padding" id="partners">
+        <div class="container">
+            <div class="partners-header reveal">
+                <div class="eyebrow">Trusted By</div>
+                <h2>Partnered with those<br>who protect.</h2>
+            </div>
+            <div class="partners-grid reveal-stagger">
+                <div class="partner-cell">U.S. DoD</div>
+                <div class="partner-cell">NATO Allied</div>
+                <div class="partner-cell">DARPA</div>
+                <div class="partner-cell">AUKUS</div>
+                <div class="partner-cell">DHS</div>
+                <div class="partner-cell">JADC2</div>
+                <div class="partner-cell">Space Force</div>
+                <div class="partner-cell">Coast Guard</div>
+                <div class="partner-cell">Five Eyes</div>
+                <div class="partner-cell">DIU</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section class="cta-section section-padding" id="contact">
+        <div class="container reveal">
+            <div class="eyebrow">Get Started</div>
+            <h2>Ready to rethink defense?</h2>
+            <p>Connect with our team to discuss how Northwatch systems can protect your critical assets and infrastructure.</p>
+            <div class="cta-actions">
+                <a href="#" class="btn btn-white">
+                    Schedule a Briefing
+                    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="#" class="btn btn-outline-white">Request Capabilities Brief</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo" style="color:#fff;">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                            <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#027bc6" stroke-width="1" fill="none" opacity="0.5"/>
+                            <path d="M18 13v10M13 16l5 3 5-3" stroke="#027bc6" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span class="nav-logo-text" style="color:#fff;">Northwatch</span>
+                    </a>
+                    <p>Autonomous defense systems built on the principle that protection — not aggression — is the foundation of lasting security.</p>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Systems</div>
+                    <a href="products/payload-transport.html">Payload Transport</a>
+                    <a href="products/drone-defense.html">Drone Defense</a>
+                    <a href="products/jamming-systems.html">Jamming Systems</a>
+                    <a href="products/autonomous-drones.html">Autonomous Drones</a>
+                    <a href="products/surveillance-drones.html">Surveillance Drones</a>
+                    <a href="products/sea-drones.html">Sea Drones</a>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Company</div>
+                    <a href="#">About</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Newsroom</a>
+                    <a href="#">Ethics</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-col-title">Resources</div>
+                    <a href="#">Documentation</a>
+                    <a href="#">White Papers</a>
+                    <a href="#">Case Studies</a>
+                    <a href="#">Blog</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Northwatch Technologies, Inc. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ============================================
+        // NAV SCROLL
+        // ============================================
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ============================================
+        // MOBILE NAV
+        // ============================================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileNav = document.getElementById('mobileNav');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('open');
+        });
+
+        function closeMobileNav() {
+            mobileNav.classList.remove('open');
+        }
+
+        // ============================================
+        // SCROLL REVEAL
+        // ============================================
+        const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12 });
+
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        // ============================================
+        // VIDEO REEL
+        // ============================================
+        const videos = document.querySelectorAll('#heroVideoWrap video');
+        const pips = document.querySelectorAll('#heroPips .pip-fill');
+        let currentVideo = 0;
+        const videoDuration = 8000; // ms per video
+        let videoTimer = null;
+        let pipInterval = null;
+
+        function playVideo(index) {
+            // Reset all
+            videos.forEach((v, i) => {
+                v.classList.remove('active');
+                v.pause();
+                pips[i].style.width = '0%';
+            });
+
+            const video = videos[index];
+            video.currentTime = 0;
+            video.play().catch(() => {});
+            video.classList.add('active');
+
+            // Animate pip
+            let start = Date.now();
+            clearInterval(pipInterval);
+            pipInterval = setInterval(() => {
+                const elapsed = Date.now() - start;
+                const pct = Math.min((elapsed / videoDuration) * 100, 100);
+                pips[index].style.width = pct + '%';
+            }, 50);
+
+            clearTimeout(videoTimer);
+            videoTimer = setTimeout(() => {
+                currentVideo = (currentVideo + 1) % videos.length;
+                playVideo(currentVideo);
+            }, videoDuration);
+        }
+
+        // Start after a short delay for loading
+        setTimeout(() => playVideo(0), 500);
+
+        // ============================================
+        // COUNTER ANIMATION
+        // ============================================
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.target);
+                    const suffix = el.dataset.suffix || '';
+                    const isDecimal = el.dataset.decimal === 'true';
+                    const duration = 1500;
+                    const start = Date.now();
+
+                    function updateCounter() {
+                        const elapsed = Date.now() - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out cubic
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = eased * target;
+
+                        if (isDecimal) {
+                            el.textContent = current.toFixed(1) + suffix;
+                        } else {
+                            el.textContent = Math.round(current) + suffix;
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCounter);
+                        }
+                    }
+
+                    updateCounter();
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(el => counterObserver.observe(el));
+    </script>
+</body>
+</html>
