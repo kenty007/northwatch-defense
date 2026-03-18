@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Jamming Technology — Northwatch Technologies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Source+Code+Pro:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #07090d; --bg-secondary: #0c1017; --bg-tertiary: #111620; --bg-card: #131a26;
+            --text-primary: #e8ecf2; --text-secondary: #8a96a8; --text-muted: #4a5568;
+            --accent: #00d4ff; --accent-dim: #007a94; --accent-glow: rgba(0, 212, 255, 0.15); --accent-glow-strong: rgba(0, 212, 255, 0.3);
+            --border: rgba(138, 150, 168, 0.1); --border-accent: rgba(0, 212, 255, 0.2);
+            --font-display: 'Outfit', sans-serif; --font-body: 'Instrument Sans', sans-serif; --font-mono: 'Source Code Pro', monospace;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--accent-dim) var(--bg-primary); }
+        body { font-family: var(--font-body); background-color: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        ::selection { background: var(--accent); color: var(--bg-primary); }
+
+        .cursor-glow { position: fixed; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: opacity 0.3s; opacity: 0; }
+        body:hover .cursor-glow { opacity: 1; }
+        .grid-bg { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.4; pointer-events: none; }
+        .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg-primary) 70%); }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0 clamp(1.5rem, 4vw, 4rem); height: 80px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); background: rgba(7, 9, 13, 0.7); border-bottom: 1px solid var(--border); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        nav.scrolled { height: 64px; background: rgba(7, 9, 13, 0.92); }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-primary); }
+        .nav-logo svg { width: 36px; height: 36px; }
+        .nav-logo-text { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.08em; text-transform: uppercase; }
+        .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta { padding: 10px 24px; background: transparent; border: 1px solid var(--accent); color: var(--accent) !important; font-family: var(--font-display); font-weight: 600; font-size: 0.8rem !important; letter-spacing: 0.1em !important; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+        .nav-cta:hover { background: var(--accent); color: var(--bg-primary) !important; box-shadow: 0 0 30px var(--accent-glow-strong); }
+        .nav-cta::after { display: none !important; }
+        .mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+        .mobile-toggle span { width: 24px; height: 1.5px; background: var(--text-primary); transition: all 0.3s; }
+
+        .hero-video-wrap { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+        .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.25; filter: saturate(0.3) brightness(0.7); }
+        .hero-video-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(7,9,13,0.95) 0%, rgba(7,9,13,0.6) 50%, rgba(7,9,13,0.8) 100%), linear-gradient(to top, rgba(7,9,13,1) 0%, transparent 30%); }
+
+        .product-hero { position: relative; min-height: 80vh; display: flex; align-items: center; padding: clamp(2rem, 5vw, 6rem); padding-top: 140px; overflow: hidden; z-index: 1; }
+        .product-hero-radial { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: radial-gradient(ellipse at 80% 40%, var(--accent-glow) 0%, transparent 60%); pointer-events: none; }
+        .product-hero-content { max-width: 650px; position: relative; z-index: 2; }
+        .product-hero-visual { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: clamp(320px, 38vw, 550px); height: clamp(320px, 38vw, 550px); opacity: 0.12; pointer-events: none; }
+        .hero-tag { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 400; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2rem; opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.3s forwards; }
+        .hero-tag .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+        .product-title { font-family: var(--font-display); font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem; opacity: 0; transform: translateY(30px); animation: fadeUp 0.8s 0.5s forwards; }
+        .product-title .accent-word { color: var(--accent); }
+        .product-tagline { font-family: var(--font-display); font-size: clamp(1.2rem, 2vw, 1.6rem); font-weight: 300; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4; opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.7s forwards; }
+        .product-desc { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 2.5rem; opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.9s forwards; }
+        .hero-actions { display: flex; gap: 1.25rem; align-items: center; opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 1.1s forwards; }
+
+        .btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: var(--accent); color: var(--bg-primary); font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+        .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); opacity: 0; transition: opacity 0.3s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--accent-glow-strong); }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; background: transparent; color: var(--text-primary); font-family: var(--font-display); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+        .btn-secondary:hover { border-color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+
+        section { position: relative; z-index: 1; }
+        .section-padding { padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 4vw, 4rem); }
+        .section-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; }
+        .section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+        .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.5rem; }
+        .section-desc { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; max-width: 560px; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .specs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 3rem; }
+        .spec-card { background: var(--bg-primary); padding: clamp(1.5rem, 3vw, 2.5rem); position: relative; overflow: hidden; transition: background 0.4s; }
+        .spec-card:hover { background: var(--bg-secondary); }
+        .spec-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.4s; }
+        .spec-card:hover::before { opacity: 1; }
+        .spec-value { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; color: var(--accent); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .spec-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); letter-spacing: 0.15em; text-transform: uppercase; }
+        .spec-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.75rem; }
+
+        .use-cases-section { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .use-cases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+        .use-case-card { padding: 2rem; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.4s; position: relative; overflow: hidden; }
+        .use-case-card:hover { border-color: var(--border-accent); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .use-case-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform 0.4s; }
+        .use-case-card:hover::after { transform: scaleX(1); }
+        .use-case-icon { width: 40px; height: 40px; color: var(--accent); margin-bottom: 1.25rem; opacity: 0.8; }
+        .use-case-title { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
+        .use-case-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+        .cta-section { text-align: center; position: relative; overflow: hidden; }
+        .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 100%, var(--accent-glow) 0%, transparent 50%); pointer-events: none; }
+        .cta-title { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .cta-desc { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; max-width: 500px; margin: 0 auto 2.5rem; }
+
+        footer { border-top: 1px solid var(--border); background: var(--bg-secondary); }
+        .footer-inner { padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; max-width: 280px; }
+        .footer-col-title { font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; margin-bottom: 0.8rem; transition: color 0.3s; }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom { padding: 1.5rem clamp(1.5rem, 4vw, 4rem); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-muted); }
+        .footer-bottom-links { display: flex; gap: 2rem; }
+        .footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+        .footer-bottom-links a:hover { color: var(--text-secondary); }
+
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow-strong); } 50% { opacity: 0.7; box-shadow: 0 0 0 8px transparent; } }
+
+        @media (max-width: 1024px) { .specs-grid { grid-template-columns: repeat(2, 1fr); } .use-cases-grid { grid-template-columns: repeat(2, 1fr); } .footer-inner { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 768px) { .nav-links { display: none; } .mobile-toggle { display: flex; } .specs-grid { grid-template-columns: 1fr; } .use-cases-grid { grid-template-columns: 1fr; } .product-hero-visual { opacity: 0.06; right: -10%; } .footer-inner { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; } }
+        @media (max-width: 480px) { .hero-actions { flex-direction: column; align-items: flex-start; } }
+    </style>
+</head>
+<body>
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="grid-bg"></div>
+
+    <nav id="mainNav">
+        <a href="../index.html" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                <path d="M18 10l-6 4v8l6 4 6-4v-8l-6-4z" fill="var(--accent)" opacity="0.15"/>
+                <path d="M18 13v10M13 16l5 3 5-3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-logo-text">Northwatch</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="../index.html#capabilities">Products</a></li>
+            <li><a href="../index.html#technology">Technology</a></li>
+            <li><a href="../index.html#mission">Mission</a></li>
+            <li><a href="../index.html#partners">Partners</a></li>
+            <li><a href="../index.html#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+
+    <section class="product-hero">
+        <div class="hero-video-wrap">
+            <video class="hero-video" autoplay muted loop playsinline>
+                <source src="https://assets.mixkit.co/videos/5436/5436-720.mp4" type="video/mp4">
+            </video>
+            <div class="hero-video-overlay"></div>
+        </div>
+        <div class="product-hero-radial"></div>
+        <div class="product-hero-visual">
+            <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Jamming wave pattern -->
+                <circle cx="250" cy="300" r="20" stroke="var(--accent)" stroke-width="1.5" fill="var(--accent)" opacity="0.15"/>
+                <circle cx="250" cy="300" r="60" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.6"/>
+                <circle cx="250" cy="300" r="100" stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.4"/>
+                <circle cx="250" cy="300" r="140" stroke="var(--accent)" stroke-width="0.6" fill="none" opacity="0.3"/>
+                <circle cx="250" cy="300" r="180" stroke="var(--accent)" stroke-width="0.4" fill="none" opacity="0.2"/>
+                <!-- Antenna tower -->
+                <line x1="250" y1="300" x2="250" y2="180" stroke="var(--accent)" stroke-width="1.5"/>
+                <line x1="250" y1="180" x2="230" y2="220" stroke="var(--accent)" stroke-width="1"/>
+                <line x1="250" y1="180" x2="270" y2="220" stroke="var(--accent)" stroke-width="1"/>
+                <line x1="250" y1="200" x2="235" y2="230" stroke="var(--accent)" stroke-width="0.8"/>
+                <line x1="250" y1="200" x2="265" y2="230" stroke="var(--accent)" stroke-width="0.8"/>
+                <!-- RF burst lines -->
+                <path d="M270 180 Q290 160 310 170" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M280 170 Q310 140 340 155" stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.4"/>
+                <path d="M230 180 Q210 160 190 170" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M220 170 Q190 140 160 155" stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.4"/>
+                <!-- Spectrum bars -->
+                <rect x="100" y="400" width="8" height="30" fill="var(--accent)" opacity="0.3"/>
+                <rect x="120" y="390" width="8" height="40" fill="var(--accent)" opacity="0.4"/>
+                <rect x="140" y="380" width="8" height="50" fill="var(--accent)" opacity="0.5"/>
+                <rect x="160" y="395" width="8" height="35" fill="var(--accent)" opacity="0.3"/>
+                <rect x="180" y="370" width="8" height="60" fill="var(--accent)" opacity="0.6"/>
+                <rect x="200" y="385" width="8" height="45" fill="var(--accent)" opacity="0.4"/>
+                <rect x="300" y="385" width="8" height="45" fill="var(--accent)" opacity="0.4"/>
+                <rect x="320" y="375" width="8" height="55" fill="var(--accent)" opacity="0.5"/>
+                <rect x="340" y="390" width="8" height="40" fill="var(--accent)" opacity="0.3"/>
+                <rect x="360" y="380" width="8" height="50" fill="var(--accent)" opacity="0.4"/>
+                <rect x="380" y="395" width="8" height="35" fill="var(--accent)" opacity="0.3"/>
+                <rect x="400" y="400" width="8" height="30" fill="var(--accent)" opacity="0.2"/>
+            </svg>
+        </div>
+        <div class="product-hero-content">
+            <div class="hero-tag"><span class="pulse"></span> Electronic Warfare Suite</div>
+            <h1 class="product-title">Drone <span class="accent-word">Jamming</span> Technology</h1>
+            <p class="product-tagline">Deny the Signal. Own the Spectrum.</p>
+            <p class="product-desc">Electronic warfare suites delivering precision spectrum dominance through adaptive multiband RF jamming, GNSS denial, and cognitive electronic attack. Deny adversary command links while preserving friendly communications.</p>
+            <div class="hero-actions">
+                <a href="../index.html#contact" class="btn-primary">Request Briefing <span>&rarr;</span></a>
+                <a href="../index.html#capabilities" class="btn-secondary">All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="reveal">
+            <div class="section-label">Key Specifications</div>
+            <h2 class="section-title">Precision Spectrum Dominance</h2>
+            <p class="section-desc">AI-driven cognitive electronic warfare that adapts in real-time to the electromagnetic environment.</p>
+        </div>
+        <div class="specs-grid">
+            <div class="spec-card reveal">
+                <div class="spec-value">400MHz-6GHz</div>
+                <div class="spec-label">Multiband Coverage</div>
+                <p class="spec-desc">Wideband jamming capability spanning all commercial and military drone control frequencies.</p>
+            </div>
+            <div class="spec-card reveal">
+                <div class="spec-value">4-System</div>
+                <div class="spec-label">GNSS Denial</div>
+                <p class="spec-desc">Simultaneous GPS, GLONASS, Galileo, and BeiDou spoofing and denial across all satellite navigation bands.</p>
+            </div>
+            <div class="spec-card reveal">
+                <div class="spec-value">AI-Driven</div>
+                <div class="spec-label">Spectrum Sensing</div>
+                <p class="spec-desc">Cognitive electronic attack with real-time signal classification and adaptive jamming waveform generation.</p>
+            </div>
+            <div class="spec-card reveal">
+                <div class="spec-value">2km+</div>
+                <div class="spec-label">HPM Disruption Range</div>
+                <p class="spec-desc">High-power microwave disruption capability for hard-kill electronic defeat of drone avionics systems.</p>
+            </div>
+            <div class="spec-card reveal">
+                <div class="spec-value">Surgical</div>
+                <div class="spec-label">Precision Targeting</div>
+                <p class="spec-desc">Narrow-beam directional jamming preserves friendly comms while denying adversary command links.</p>
+            </div>
+            <div class="spec-card reveal">
+                <div class="spec-value">Real-Time</div>
+                <div class="spec-label">Threat Adaptation</div>
+                <p class="spec-desc">Millisecond-level waveform adaptation to counter frequency-hopping and spread-spectrum evasion techniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases-section section-padding">
+        <div class="reveal">
+            <div class="section-label">Operational Applications</div>
+            <h2 class="section-title">Electromagnetic Superiority</h2>
+        </div>
+        <div class="use-cases-grid">
+            <div class="use-case-card reveal">
+                <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                </svg>
+                <div class="use-case-title">Airspace Denial</div>
+                <p class="use-case-desc">Create impenetrable electromagnetic exclusion zones that render hostile drones inoperable over defined areas.</p>
+            </div>
+            <div class="use-case-card reveal">
+                <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                <div class="use-case-title">SIGINT Operations</div>
+                <p class="use-case-desc">Passive signal intelligence collection and analysis before transitioning to active jamming engagement.</p>
+            </div>
+            <div class="use-case-card reveal">
+                <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+                <div class="use-case-title">Counter-Swarm Defense</div>
+                <p class="use-case-desc">Simultaneous multi-target jamming to disrupt swarm coordination protocols and mesh networking.</p>
+            </div>
+            <div class="use-case-card reveal">
+                <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>
+                </svg>
+                <div class="use-case-title">Perimeter Security</div>
+                <p class="use-case-desc">Persistent electromagnetic barrier around high-value installations with automated threat response.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section section-padding">
+        <div class="reveal">
+            <h2 class="cta-title">Own the Electromagnetic Battlespace</h2>
+            <p class="cta-desc">Engage our electronic warfare specialists for a spectrum threat assessment and tailored EW solution architecture.</p>
+            <a href="../index.html#contact" class="btn-primary">Get in Touch <span>&rarr;</span></a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="../index.html" class="nav-logo" style="margin-bottom: 0.5rem;">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                        <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                        <path d="M18 13v10M13 16l5 3 5-3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-logo-text">Northwatch</span>
+                </a>
+                <p>Autonomous defense systems built on the principle that protection — not aggression — is the foundation of lasting security.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Systems</div>
+                <a href="payload-transport.html">Payload Transport</a>
+                <a href="drone-defense.html">Drone Defense</a>
+                <a href="jamming-systems.html">Jamming Systems</a>
+                <a href="autonomous-drones.html">Autonomous Drones</a>
+                <a href="surveillance-drones.html">Surveillance Drones</a>
+                <a href="sea-drones.html">Sea Drones</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <a href="../index.html#mission">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Newsroom</a>
+                <a href="#">Ethics</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Resources</div>
+                <a href="#">Documentation</a>
+                <a href="#">White Papers</a>
+                <a href="#">Case Studies</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Northwatch Technologies, Inc. All rights reserved.</span>
+            <div class="footer-bottom-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
+        </div>
+    </footer>
+
+    <script>
+        const cursorGlow = document.getElementById('cursorGlow');
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        function animateCursor() { glowX += (mouseX - glowX) * 0.1; glowY += (mouseY - glowY) * 0.1; cursorGlow.style.left = glowX + 'px'; cursorGlow.style.top = glowY + 'px'; requestAnimationFrame(animateCursor); }
+        animateCursor();
+        const mainNav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => { mainNav.classList.toggle('scrolled', window.scrollY > 60); });
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { const siblings = entry.target.parentElement.querySelectorAll('.reveal'); setTimeout(() => { entry.target.classList.add('active'); }, Array.from(siblings).indexOf(entry.target) * 100); revealObserver.unobserve(entry.target); } }); }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>

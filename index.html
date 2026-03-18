@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwatch Technologies — Defense First</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Source+Code+Pro:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════
+           CSS VARIABLES & RESET
+           ═══════════════════════════════════════════════════ */
+        :root {
+            --bg-primary: #07090d;
+            --bg-secondary: #0c1017;
+            --bg-tertiary: #111620;
+            --bg-card: #131a26;
+            --text-primary: #e8ecf2;
+            --text-secondary: #8a96a8;
+            --text-muted: #4a5568;
+            --accent: #00d4ff;
+            --accent-dim: #007a94;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+            --accent-glow-strong: rgba(0, 212, 255, 0.3);
+            --border: rgba(138, 150, 168, 0.1);
+            --border-accent: rgba(0, 212, 255, 0.2);
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Instrument Sans', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-dim) var(--bg-primary);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           CUSTOM CURSOR TRAIL
+           ═══════════════════════════════════════════════════ */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+
+        body:hover .cursor-glow {
+            opacity: 1;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           GRID BACKGROUND
+           ═══════════════════════════════════════════════════ */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .grid-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg-primary) 70%);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════════ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 clamp(1.5rem, 4vw, 4rem);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            background: rgba(7, 9, 13, 0.7);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav.scrolled {
+            height: 64px;
+            background: rgba(7, 9, 13, 0.92);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .nav-logo-text {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent) !important;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.1em !important;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: var(--bg-primary) !important;
+            box-shadow: 0 0 30px var(--accent-glow-strong);
+        }
+
+        .nav-cta::after {
+            display: none !important;
+        }
+
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .mobile-toggle span {
+            width: 24px;
+            height: 1.5px;
+            background: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           HERO SECTION
+           ═══════════════════════════════════════════════════ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(2rem, 5vw, 6rem);
+            padding-top: 120px;
+            overflow: hidden;
+        }
+
+        /* Hero Video Reel */
+        .hero-video-reel {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-video-reel video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.8s ease-in-out;
+            filter: saturate(0.3) brightness(0.6);
+        }
+
+        .hero-video-reel video.active {
+            opacity: 0.3;
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                linear-gradient(to right, rgba(7,9,13,0.97) 0%, rgba(7,9,13,0.65) 45%, rgba(7,9,13,0.4) 100%),
+                linear-gradient(to top, rgba(7,9,13,1) 0%, transparent 25%),
+                linear-gradient(to bottom, rgba(7,9,13,0.8) 0%, transparent 20%);
+        }
+
+        .hero-video-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            display: flex;
+            gap: 4px;
+            padding: 0 clamp(1.5rem, 4vw, 4rem);
+            padding-bottom: 5rem;
+        }
+
+        .hero-video-progress .pip {
+            flex: 1;
+            height: 2px;
+            background: rgba(138,150,168,0.15);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .hero-video-progress .pip-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            border-radius: 1px;
+            transition: width 0.1s linear;
+        }
+
+        .hero-video-progress .pip.active .pip-fill {
+            width: 100%;
+        }
+
+        .hero-shield {
+            position: absolute;
+            right: -5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(400px, 50vw, 800px);
+            height: clamp(400px, 50vw, 800px);
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .hero-shield svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Defense Animation Canvas */
+        .defense-canvas-wrap {
+            position: absolute;
+            right: 2%;
+            top: 120px;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeUp 1.2s 0.6s forwards;
+        }
+
+        .defense-canvas-wrap canvas {
+            width: clamp(400px, 45vw, 700px);
+            height: clamp(400px, 45vw, 700px);
+        }
+
+
+        .hero-radial {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70%;
+            height: 100%;
+            background: radial-gradient(ellipse at 80% 40%, var(--accent-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-tag, .hero-headline, .hero-sub, .hero-actions {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s 0.3s forwards;
+        }
+
+        .hero-tag .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-headline {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            max-width: 900px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-headline .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-headline .line span {
+            display: block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-headline .line:nth-child(1) span { animation-delay: 0.5s; }
+        .hero-headline .line:nth-child(2) span { animation-delay: 0.65s; }
+        .hero-headline .line:nth-child(3) span { animation-delay: 0.8s; }
+
+        .hero-headline .accent-word {
+            color: var(--accent);
+            position: relative;
+        }
+
+        .hero-sub {
+            max-width: 520px;
+            font-size: clamp(1rem, 1.5vw, 1.15rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s 1s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s 1.2s forwards;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px var(--accent-glow-strong);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeUp 0.8s 1.8s forwards;
+        }
+
+        .hero-scroll-indicator span {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           SECTION COMMONS
+           ═══════════════════════════════════════════════════ */
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-padding {
+            padding: clamp(4rem, 10vw, 10rem) clamp(1.5rem, 4vw, 4rem);
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--accent);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4.5vw, 3.8rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            max-width: 700px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           BANNER MARQUEE
+           ═══════════════════════════════════════════════════ */
+        .marquee-section {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+            padding: 1.5rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 4rem;
+            animation: marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .marquee-item .dot {
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           MISSION SECTION
+           ═══════════════════════════════════════════════════ */
+        .mission {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 5vw, 6rem);
+            align-items: center;
+        }
+
+        .mission-visual {
+            position: relative;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shield-container {
+            position: relative;
+            width: 70%;
+            aspect-ratio: 1;
+        }
+
+        .shield-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--border-accent);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .shield-ring:nth-child(2) {
+            inset: 12%;
+            animation-duration: 15s;
+            animation-direction: reverse;
+            border-style: dashed;
+        }
+
+        .shield-ring:nth-child(3) {
+            inset: 24%;
+            animation-duration: 25s;
+        }
+
+        .shield-core {
+            position: absolute;
+            inset: 34%;
+            background: radial-gradient(circle, var(--accent-glow-strong), transparent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shield-core svg {
+            width: 48px;
+            height: 48px;
+            color: var(--accent);
+        }
+
+        .shield-data-point {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-glow-strong);
+        }
+
+        .shield-data-point:nth-child(5) { top: 5%; left: 48%; }
+        .shield-data-point:nth-child(6) { top: 50%; right: 2%; }
+        .shield-data-point:nth-child(7) { bottom: 8%; left: 30%; }
+        .shield-data-point:nth-child(8) { top: 25%; left: 5%; }
+
+        .mission-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+            font-weight: 300;
+            line-height: 1.5;
+            color: var(--text-primary);
+            margin-top: 2rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           CAPABILITIES SECTION
+           ═══════════════════════════════════════════════════ */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            margin-top: 4rem;
+        }
+
+        .capability-card {
+            background: var(--bg-primary);
+            padding: clamp(2rem, 3vw, 3rem);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background 0.4s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .capability-card:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px var(--accent-glow);
+            z-index: 2;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-number {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        .capability-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            opacity: 0.8;
+        }
+
+        .capability-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .capability-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .capability-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .capability-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--accent-dim);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border: 1px solid var(--border-accent);
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        .capability-card:hover .capability-tag {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .capability-arrow {
+            position: absolute;
+            bottom: clamp(2rem, 3vw, 3rem);
+            right: clamp(2rem, 3vw, 3rem);
+            width: 32px;
+            height: 32px;
+            color: var(--text-muted);
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .capability-card:hover .capability-arrow {
+            color: var(--accent);
+            transform: translate(4px, -4px);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           STATS / METRICS SECTION
+           ═══════════════════════════════════════════════════ */
+        .stats-section {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           TECHNOLOGY SECTION
+           ═══════════════════════════════════════════════════ */
+        .tech-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 5vw, 6rem);
+            margin-top: 4rem;
+        }
+
+        .tech-visual {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tech-visual-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        .radar-sweep {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 1px solid var(--border-accent);
+            position: relative;
+        }
+
+        .radar-sweep::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--accent-glow-strong) 60deg, transparent 60deg);
+            animation: rotate 3s linear infinite;
+        }
+
+        .radar-sweep::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .radar-ring {
+            position: absolute;
+            border: 1px solid var(--border-accent);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .radar-ring:nth-child(1) { width: 66%; height: 66%; }
+        .radar-ring:nth-child(2) { width: 33%; height: 33%; }
+
+        .tech-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .tech-feature {
+            padding: 1.5rem;
+            border-left: 2px solid var(--border);
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .tech-feature:hover {
+            border-left-color: var(--accent);
+            background: var(--accent-glow);
+            padding-left: 2rem;
+        }
+
+        .tech-feature-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-feature-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           PHILOSOPHY BANNER
+           ═══════════════════════════════════════════════════ */
+        .philosophy-section {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .philosophy-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 300;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .philosophy-text strong {
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .philosophy-divider {
+            width: 60px;
+            height: 1px;
+            background: var(--accent);
+            margin: 2.5rem auto;
+        }
+
+        .philosophy-sub {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           PARTNERS / TRUST SECTION
+           ═══════════════════════════════════════════════════ */
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: var(--border);
+            margin-top: 3rem;
+        }
+
+        .partner-cell {
+            background: var(--bg-primary);
+            padding: 3rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: all 0.4s;
+        }
+
+        .partner-cell:hover {
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           CTA SECTION
+           ═══════════════════════════════════════════════════ */
+        .cta-section {
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 100%, var(--accent-glow) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* ═══════════════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════════════ */
+        footer {
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .footer-inner {
+            padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            margin-top: 1rem;
+            max-width: 280px;
+        }
+
+        .footer-col-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            padding: 1.5rem clamp(1.5rem, 4vw, 4rem);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--text-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           KEYFRAMES
+           ═══════════════════════════════════════════════════ */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow-strong); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 8px transparent; }
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes marquee {
+            to { transform: translateX(-50%); }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); transform-origin: top; }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══════════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .mission {
+                grid-template-columns: 1fr;
+            }
+            .mission-visual {
+                order: -1;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .capabilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tech-layout {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .partners-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-toggle {
+                display: flex;
+            }
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-inner {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .hero-shield {
+                opacity: 0.02;
+                right: -20%;
+            }
+            .defense-canvas-wrap {
+                width: 320px;
+                height: 320px;
+                right: -10%;
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cursor Glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <a href="#" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                <path d="M18 10l-6 4v8l6 4 6-4v-8l-6-4z" fill="var(--accent)" opacity="0.15"/>
+                <path d="M18 13v10M13 16l5 3 5-3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-logo-text">Northwatch</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#capabilities">Products</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#partners">Partners</a></li>
+            <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <!-- Cinematic Video Reel -->
+        <div class="hero-video-reel" id="heroVideoReel">
+            <video muted playsinline preload="auto" data-label="Payload Transport">
+                <source src="https://assets.mixkit.co/videos/44644/44644-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto" data-label="Drone Defense">
+                <source src="https://assets.mixkit.co/videos/23018/23018-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto" data-label="Jamming Systems">
+                <source src="https://assets.mixkit.co/videos/5436/5436-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto" data-label="Autonomous Drones">
+                <source src="https://assets.mixkit.co/videos/7373/7373-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto" data-label="Surveillance">
+                <source src="https://assets.mixkit.co/videos/26920/26920-720.mp4" type="video/mp4">
+            </video>
+            <video muted playsinline preload="auto" data-label="Sea Drones">
+                <source src="https://assets.mixkit.co/videos/17271/17271-720.mp4" type="video/mp4">
+            </video>
+            <div class="hero-video-overlay"></div>
+        </div>
+        <!-- Progress pips -->
+        <div class="hero-video-progress" id="heroVideoPips">
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+            <div class="pip"><div class="pip-fill"></div></div>
+        </div>
+        <div class="hero-radial"></div>
+        <div class="hero-shield">
+            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M200 20L40 100v140c0 80 68 140 160 140s160-60 160-140V100L200 20z" stroke="var(--accent)" stroke-width="1" fill="none"/>
+                <path d="M200 60L80 120v100c0 60 52 110 120 110s120-50 120-110V120L200 60z" stroke="var(--accent)" stroke-width="0.5" fill="none" opacity="0.4"/>
+                <path d="M200 100l-80 42v72c0 44 36 78 80 78s80-34 80-78v-72L200 100z" stroke="var(--accent)" stroke-width="0.5" fill="none" opacity="0.2"/>
+            </svg>
+        </div>
+        <!-- Defense Animation -->
+        <div class="defense-canvas-wrap">
+            <canvas id="defenseCanvas"></canvas>
+        </div>
+
+        <div class="hero-tag">
+            <span class="pulse"></span>
+            Defense Systems Active
+        </div>
+
+        <h1 class="hero-headline">
+            <span class="line"><span>The Future</span></span>
+            <span class="line"><span>of <span class="accent-word">Defense</span></span></span>
+            <span class="line"><span>Is Here.</span></span>
+        </h1>
+
+        <p class="hero-sub">
+            Northwatch Technologies builds autonomous defense systems that protect without provocation. We believe the strongest deterrent is an impenetrable shield — not a sharper sword.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#capabilities" class="btn-primary">
+                Explore Products
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#mission" class="btn-secondary">Our Mission</a>
+        </div>
+
+        <div class="hero-scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span class="marquee-item">Autonomous Defense <span class="dot"></span></span>
+            <span class="marquee-item">Perimeter Security <span class="dot"></span></span>
+            <span class="marquee-item">Threat Detection <span class="dot"></span></span>
+            <span class="marquee-item">Counter-UAS <span class="dot"></span></span>
+            <span class="marquee-item">Sensor Fusion <span class="dot"></span></span>
+            <span class="marquee-item">AI-Driven Response <span class="dot"></span></span>
+            <span class="marquee-item">Electronic Warfare <span class="dot"></span></span>
+            <span class="marquee-item">Maritime Shield <span class="dot"></span></span>
+            <!-- Duplicate for seamless loop -->
+            <span class="marquee-item">Autonomous Defense <span class="dot"></span></span>
+            <span class="marquee-item">Perimeter Security <span class="dot"></span></span>
+            <span class="marquee-item">Threat Detection <span class="dot"></span></span>
+            <span class="marquee-item">Counter-UAS <span class="dot"></span></span>
+            <span class="marquee-item">Sensor Fusion <span class="dot"></span></span>
+            <span class="marquee-item">AI-Driven Response <span class="dot"></span></span>
+            <span class="marquee-item">Electronic Warfare <span class="dot"></span></span>
+            <span class="marquee-item">Maritime Shield <span class="dot"></span></span>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="section-padding" id="mission">
+        <div class="mission">
+            <div class="mission-content reveal">
+                <div class="section-label">Our Mission</div>
+                <h2 class="section-title">Defense first.<br>Always.</h2>
+                <p class="section-desc">
+                    We reject the doctrine of preemptive aggression. Northwatch exists to build systems that detect, deter, and neutralize threats — without initiating conflict. Our technology creates defensive superiority so absolute that offense becomes irrelevant.
+                </p>
+                <blockquote class="mission-quote">
+                    "The supreme art of war is to subdue the enemy without fighting."
+                    <br><span style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; display: block;">— Sun Tzu</span>
+                </blockquote>
+            </div>
+            <div class="mission-visual reveal">
+                <div class="shield-container">
+                    <div class="shield-ring"></div>
+                    <div class="shield-ring"></div>
+                    <div class="shield-ring"></div>
+                    <div class="shield-core">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L3 7v6c0 5.25 3.75 10.13 9 11.25C17.25 23.13 21 18.25 21 13V7l-9-5z"/>
+                            <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="shield-data-point"></div>
+                    <div class="shield-data-point"></div>
+                    <div class="shield-data-point"></div>
+                    <div class="shield-data-point"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section-padding" id="capabilities">
+        <div class="reveal">
+            <div class="section-label">Defense Technologies</div>
+            <h2 class="section-title">Advanced drone systems<br>for every domain.</h2>
+            <p class="section-desc">
+                Six specialized platforms. One integrated ecosystem. Northwatch drone technologies deliver autonomous capability across logistics, defense, electronic warfare, and maritime operations.
+            </p>
+        </div>
+
+        <div class="capabilities-grid">
+            <a href="products/payload-transport.html" class="capability-card reveal">
+                <div class="capability-number">01</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M24 6l-8 4v8l8 4 8-4V10l-8-4z"/>
+                    <path d="M16 18v6l8 4 8-4v-6"/>
+                    <path d="M24 22v12"/>
+                    <path d="M18 38h12"/>
+                    <path d="M14 40l10 4 10-4"/>
+                    <circle cx="10" cy="10" r="2" opacity="0.4"/>
+                    <circle cx="38" cy="10" r="2" opacity="0.4"/>
+                    <path d="M10 12v6M38 12v6" opacity="0.4"/>
+                </svg>
+                <h3 class="capability-title">Drone Payload Transportation</h3>
+                <p class="capability-desc">Autonomous logistics and cargo delivery drones engineered for defense supply chains. Heavy-lift capable platforms that ensure rapid resupply across contested environments with pinpoint delivery accuracy.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">Logistics</span>
+                    <span class="capability-tag">Heavy-Lift</span>
+                    <span class="capability-tag">Autonomous Delivery</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="products/drone-defense.html" class="capability-card reveal">
+                <div class="capability-number">02</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M24 4L10 14v16l14 14 14-14V14L24 4z"/>
+                    <path d="M24 12l-8 6v10l8 8 8-8V18l-8-6z" opacity="0.5"/>
+                    <circle cx="24" cy="24" r="4"/>
+                    <path d="M24 20v-4M24 32v-4M20 24h-4M32 24h-4"/>
+                    <path d="M6 8l4 4M38 8l-4 4M6 40l4-4M38 40l-4-4" opacity="0.3"/>
+                </svg>
+                <h3 class="capability-title">Drone Defense Technology</h3>
+                <p class="capability-desc">Counter-drone and active aerial defense platforms that detect, track, and neutralize hostile UAS threats. Multi-layered interdiction from early warning through kinetic and non-kinetic response.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">Counter-UAS</span>
+                    <span class="capability-tag">Active Defense</span>
+                    <span class="capability-tag">Interdiction</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="products/jamming-systems.html" class="capability-card reveal">
+                <div class="capability-number">03</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M24 8v32"/>
+                    <path d="M18 12c-4 2-8 6-8 12s4 10 8 12"/>
+                    <path d="M30 12c4 2 8 6 8 12s-4 10-8 12"/>
+                    <path d="M14 16c-3 2-6 4-6 8s3 6 6 8" opacity="0.5"/>
+                    <path d="M34 16c3 2 6 4 6 8s-3 6-6 8" opacity="0.5"/>
+                    <circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.6"/>
+                    <path d="M4 24h6M38 24h6" stroke-dasharray="2 2" opacity="0.3"/>
+                </svg>
+                <h3 class="capability-title">Drone Jamming Technology</h3>
+                <p class="capability-desc">Electronic warfare and RF countermeasure drone systems that disrupt hostile communications and navigation. Precision-targeted signal denial across multiple frequency bands with minimal collateral interference.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">Electronic Warfare</span>
+                    <span class="capability-tag">RF Denial</span>
+                    <span class="capability-tag">SIGINT</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="products/autonomous-drones.html" class="capability-card reveal">
+                <div class="capability-number">04</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="24" cy="20" r="6"/>
+                    <path d="M18 20l-10-4M30 20l10-4"/>
+                    <path d="M18 20l-10 4M30 20l10 4"/>
+                    <circle cx="8" cy="16" r="3" opacity="0.5"/>
+                    <circle cx="40" cy="16" r="3" opacity="0.5"/>
+                    <circle cx="8" cy="24" r="3" opacity="0.5"/>
+                    <circle cx="40" cy="24" r="3" opacity="0.5"/>
+                    <path d="M24 26v10"/>
+                    <path d="M20 32h8" opacity="0.4"/>
+                    <circle cx="24" cy="20" r="2" fill="currentColor" opacity="0.6"/>
+                    <path d="M16 38c0-4 3.6-6 8-6s8 2 8 6" opacity="0.3"/>
+                </svg>
+                <h3 class="capability-title">Autonomous Drones</h3>
+                <p class="capability-desc">AI-driven autonomous UAVs with swarm intelligence that coordinate multi-vehicle missions without human intervention. Adaptive path planning, real-time threat avoidance, and decentralized decision-making at machine speed.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">Swarm AI</span>
+                    <span class="capability-tag">Autonomous</span>
+                    <span class="capability-tag">Multi-Vehicle</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="products/surveillance-drones.html" class="capability-card reveal">
+                <div class="capability-number">05</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <ellipse cx="24" cy="24" rx="18" ry="10"/>
+                    <ellipse cx="24" cy="24" rx="10" ry="6" opacity="0.5"/>
+                    <circle cx="24" cy="24" r="3" fill="currentColor" opacity="0.6"/>
+                    <path d="M24 14v-8"/>
+                    <path d="M18 6h12"/>
+                    <path d="M24 34v8"/>
+                    <path d="M12 18l-4-6M36 18l4-6" opacity="0.4"/>
+                    <path d="M8 24H2M46 24h-6" stroke-dasharray="2 2" opacity="0.3"/>
+                </svg>
+                <h3 class="capability-title">Surveillance Drones</h3>
+                <p class="capability-desc">ISR platforms equipped with multi-spectrum sensor arrays for persistent intelligence gathering. Thermal, optical, and synthetic aperture radar payloads deliver real-time situational awareness across day and night operations.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">ISR</span>
+                    <span class="capability-tag">Multi-Spectrum</span>
+                    <span class="capability-tag">Persistent</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="products/sea-drones.html" class="capability-card reveal">
+                <div class="capability-number">06</div>
+                <svg class="capability-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 28c4-2 8 2 12 0s8-2 12 0 8 2 12 0"/>
+                    <path d="M4 34c4-2 8 2 12 0s8-2 12 0 8 2 12 0" opacity="0.3"/>
+                    <path d="M14 28V16l10-6 10 6v12"/>
+                    <path d="M24 10v-4"/>
+                    <circle cx="24" cy="20" r="3"/>
+                    <path d="M18 24h12" opacity="0.4"/>
+                    <path d="M8 40c2-1 4 1 6 0s4-1 6 0 4 1 6 0 4-1 6 0 4 1 6 0 4-1 6 0" opacity="0.2"/>
+                </svg>
+                <h3 class="capability-title">Sea Drones</h3>
+                <p class="capability-desc">Unmanned surface and underwater vessels engineered for maritime operations. Autonomous mine countermeasures, anti-submarine warfare, and harbor security with extended endurance for persistent ocean-domain awareness.</p>
+                <div class="capability-tags">
+                    <span class="capability-tag">Maritime</span>
+                    <span class="capability-tag">USV / UUV</span>
+                    <span class="capability-tag">Subsurface</span>
+                </div>
+                <svg class="capability-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section section-padding" id="stats">
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="340">0</div>
+                <div class="stat-label">Sites Protected</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="99.7" data-suffix="%" data-decimal="true">0</div>
+                <div class="stat-label">Threat Detection Rate</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="12" data-suffix="ms">0</div>
+                <div class="stat-label">Response Latency</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="0">0</div>
+                <div class="stat-label">Offensive Operations</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="section-padding" id="technology">
+        <div class="reveal">
+            <div class="section-label">Technology</div>
+            <h2 class="section-title">Built to protect,<br>engineered to endure.</h2>
+        </div>
+
+        <div class="tech-layout">
+            <div class="tech-visual reveal">
+                <div class="tech-visual-grid"></div>
+                <div class="radar-sweep">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                </div>
+            </div>
+            <div class="tech-features">
+                <div class="tech-feature reveal">
+                    <h4 class="tech-feature-title">Edge AI Processing</h4>
+                    <p class="tech-feature-desc">On-device neural networks process sensor data at the edge, eliminating latency and single points of failure. Every node thinks independently while sharing intelligence across the mesh.</p>
+                </div>
+                <div class="tech-feature reveal">
+                    <h4 class="tech-feature-title">Adaptive Threat Modeling</h4>
+                    <p class="tech-feature-desc">Self-evolving algorithms that learn from every encounter. Our systems don't just detect known threats — they anticipate novel attack vectors through adversarial simulation.</p>
+                </div>
+                <div class="tech-feature reveal">
+                    <h4 class="tech-feature-title">Quantum-Resistant Encryption</h4>
+                    <p class="tech-feature-desc">Post-quantum cryptographic protocols protecting all data in transit and at rest. Built for a future where today's encryption standards are obsolete.</p>
+                </div>
+                <div class="tech-feature reveal">
+                    <h4 class="tech-feature-title">Human-in-the-Loop Doctrine</h4>
+                    <p class="tech-feature-desc">Autonomous systems accelerate response time, but human judgment governs every escalatory action. Ethical AI isn't a feature — it's the foundation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="section-padding">
+        <div class="philosophy-section reveal">
+            <div class="section-label" style="justify-content: center;">Philosophy</div>
+            <p class="philosophy-text">
+                We don't build weapons of aggression.<br>
+                We build <strong>systems of protection</strong><br>
+                that make aggression futile.
+            </p>
+            <div class="philosophy-divider"></div>
+            <p class="philosophy-sub">
+                Every system we deploy is designed with a single imperative: protect people, infrastructure, and sovereignty without initiating violence. Defense superiority is the ultimate deterrent.
+            </p>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="section-padding" id="partners">
+        <div class="reveal">
+            <div class="section-label">Trusted By</div>
+            <h2 class="section-title">Partnered with those<br>who protect.</h2>
+        </div>
+        <div class="partners-grid reveal">
+            <div class="partner-cell">U.S. DoD</div>
+            <div class="partner-cell">NATO Allied</div>
+            <div class="partner-cell">DARPA</div>
+            <div class="partner-cell">AUKUS</div>
+            <div class="partner-cell">DHS</div>
+            <div class="partner-cell">JADC2</div>
+            <div class="partner-cell">Space Force</div>
+            <div class="partner-cell">Coast Guard</div>
+            <div class="partner-cell">Five Eyes</div>
+            <div class="partner-cell">DIU</div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section-padding cta-section" id="contact">
+        <div class="reveal">
+            <div class="section-label" style="justify-content: center;">Get Started</div>
+            <h2 class="cta-title">Ready to rethink defense?</h2>
+            <p class="cta-desc">
+                Connect with our team to discuss how Northwatch systems can protect your critical assets and infrastructure.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#" class="btn-primary">
+                    Schedule a Briefing
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="#" class="btn-secondary">Request Capabilities Brief</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="#" class="nav-logo" style="margin-bottom: 0.5rem;">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                        <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                        <path d="M18 13v10M13 16l5 3 5-3" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-logo-text">Northwatch</span>
+                </a>
+                <p>Autonomous defense systems built on the principle that protection — not aggression — is the foundation of lasting security.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Systems</div>
+                <a href="#">Sentinel Radar</a>
+                <a href="#">Aegis Shield</a>
+                <a href="#">Watchtower AI</a>
+                <a href="#">Counter-UAS</a>
+                <a href="#">Maritime Domain</a>
+                <a href="#">Mesh Command</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Newsroom</a>
+                <a href="#">Ethics</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Resources</div>
+                <a href="#">Documentation</a>
+                <a href="#">White Papers</a>
+                <a href="#">Case Studies</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Northwatch Technologies, Inc. All rights reserved.</span>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ═══════════════════════════════════════════════════
+        // CURSOR GLOW
+        // ═══════════════════════════════════════════════════
+        const cursorGlow = document.getElementById('cursorGlow');
+        let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            glowX += (mouseX - glowX) * 0.1;
+            glowY += (mouseY - glowY) * 0.1;
+            cursorGlow.style.left = glowX + 'px';
+            cursorGlow.style.top = glowY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // ═══════════════════════════════════════════════════
+        // NAV SCROLL EFFECT
+        // ═══════════════════════════════════════════════════
+        const mainNav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            mainNav.classList.toggle('scrolled', window.scrollY > 60);
+        });
+
+        // ═══════════════════════════════════════════════════
+        // SCROLL REVEAL
+        // ═══════════════════════════════════════════════════
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Stagger siblings
+                    const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+                    let delay = 0;
+                    siblings.forEach((sib) => {
+                        if (sib === entry.target) return;
+                    });
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, Array.from(siblings).indexOf(entry.target) * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ═══════════════════════════════════════════════════
+        // COUNTER ANIMATION
+        // ═══════════════════════════════════════════════════
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.target);
+                    const suffix = el.dataset.suffix || '';
+                    const isDecimal = el.dataset.decimal === 'true';
+                    const duration = 2000;
+                    const start = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out cubic
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = target * eased;
+
+                        if (isDecimal) {
+                            el.textContent = current.toFixed(1) + suffix;
+                        } else {
+                            el.textContent = Math.floor(current) + suffix;
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        }
+                    }
+
+                    requestAnimationFrame(update);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(el => counterObserver.observe(el));
+
+        // ═══════════════════════════════════════════════════
+        // SMOOTH SCROLL FOR NAV LINKS
+        // ═══════════════════════════════════════════════════
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ═══════════════════════════════════════════════════
+        // PARALLAX SHIELD ON HERO
+        // ═══════════════════════════════════════════════════
+        const heroShield = document.querySelector('.hero-shield');
+        window.addEventListener('scroll', () => {
+            if (heroShield) {
+                const scrolled = window.scrollY;
+                heroShield.style.transform = `translateY(calc(-50% + ${scrolled * 0.15}px))`;
+            }
+        });
+
+        // ═══════════════════════════════════════════════════
+        // DEFENSE ANIMATION (Canvas)
+        // ═══════════════════════════════════════════════════
+        (function () {
+            const canvas = document.getElementById('defenseCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+            let W, H, cx, cy, maxR;
+
+            function resize() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                W = rect.width;
+                H = rect.height;
+                canvas.width = W * DPR;
+                canvas.height = H * DPR;
+                ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+                cx = W / 2;
+                cy = H / 2;
+                maxR = Math.min(cx, cy) * 0.88;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Colors
+            const ACCENT = '#00d4ff';
+            const ACCENT_DIM = 'rgba(0,212,255,0.12)';
+            const ACCENT_MED = 'rgba(0,212,255,0.35)';
+            const RED = '#ff3b5c';
+            const RED_DIM = 'rgba(255,59,92,0.25)';
+            const GREEN = '#00ff88';
+
+            // Rings
+            const rings = [0.3, 0.5, 0.7, 0.9];
+
+            // Threats
+            const threats = [];
+            const particles = [];
+            const interceptors = [];
+
+            // Patrol Drones
+            const drones = [
+                { ring: 2, angle: 0, speed: 0.008, dir: 1, scanAngle: 0, scanDir: 1, bobPhase: 0, propSpin: 0 },
+                { ring: 3, angle: Math.PI * 0.7, speed: 0.006, dir: -1, scanAngle: 0, scanDir: -1, bobPhase: Math.PI, propSpin: 0 },
+                { ring: 1, angle: Math.PI * 1.4, speed: 0.01, dir: 1, scanAngle: 0, scanDir: 1, bobPhase: Math.PI / 2, propSpin: 0 },
+                { ring: 3, angle: Math.PI * 1.8, speed: 0.005, dir: 1, scanAngle: 0, scanDir: -1, bobPhase: Math.PI * 1.5, propSpin: 0 },
+            ];
+
+            function drawDrone(x, y, angle, drone, size) {
+                ctx.save();
+                ctx.translate(x, y);
+                // Face direction of travel
+                const facing = drone.dir > 0 ? angle + Math.PI / 2 : angle - Math.PI / 2;
+                ctx.rotate(facing);
+
+                const s = size;
+
+                // Drone body — angular quadcopter shape
+                ctx.beginPath();
+                ctx.moveTo(0, -s * 0.7);
+                ctx.lineTo(s * 0.5, -s * 0.2);
+                ctx.lineTo(s * 0.5, s * 0.3);
+                ctx.lineTo(s * 0.2, s * 0.6);
+                ctx.lineTo(-s * 0.2, s * 0.6);
+                ctx.lineTo(-s * 0.5, s * 0.3);
+                ctx.lineTo(-s * 0.5, -s * 0.2);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(0,212,255,0.12)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(0,212,255,0.6)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Arms
+                const armLen = s * 0.9;
+                const arms = [
+                    { ax: -armLen, ay: -armLen * 0.5 },
+                    { ax: armLen, ay: -armLen * 0.5 },
+                    { ax: -armLen * 0.8, ay: armLen * 0.5 },
+                    { ax: armLen * 0.8, ay: armLen * 0.5 },
+                ];
+                arms.forEach(arm => {
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(arm.ax, arm.ay);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.35)';
+                    ctx.lineWidth = 1.2;
+                    ctx.stroke();
+
+                    // Propeller — spinning circle at arm tips
+                    drone.propSpin += 0.3;
+                    ctx.save();
+                    ctx.translate(arm.ax, arm.ay);
+                    ctx.rotate(drone.propSpin);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, s * 0.45, s * 0.12, 0, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.2)';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                    // Prop disc glow
+                    ctx.beginPath();
+                    ctx.arc(0, 0, s * 0.35, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0,212,255,0.04)';
+                    ctx.fill();
+                    ctx.restore();
+                });
+
+                // Center LED
+                ctx.beginPath();
+                ctx.arc(0, 0, 2, 0, Math.PI * 2);
+                ctx.fillStyle = ACCENT;
+                ctx.globalAlpha = 0.6 + 0.4 * Math.sin(time * 6 + drone.bobPhase);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                // Front indicator
+                ctx.beginPath();
+                ctx.arc(0, -s * 0.55, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = GREEN;
+                ctx.globalAlpha = 0.7 + 0.3 * Math.sin(time * 4);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                ctx.restore();
+
+                // Scan beam — downward cone from drone
+                drone.scanAngle += 0.02 * drone.scanDir;
+                const scanLen = maxR * 0.18;
+                const beamSpread = 0.15;
+                const beamAngle = facing + Math.PI / 2 + Math.sin(drone.scanAngle) * 0.4;
+
+                ctx.save();
+                ctx.globalAlpha = 0.08;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(
+                    x + Math.cos(beamAngle - beamSpread) * scanLen,
+                    y + Math.sin(beamAngle - beamSpread) * scanLen
+                );
+                ctx.lineTo(
+                    x + Math.cos(beamAngle + beamSpread) * scanLen,
+                    y + Math.sin(beamAngle + beamSpread) * scanLen
+                );
+                ctx.closePath();
+                const beamGrad = ctx.createRadialGradient(x, y, 0, x, y, scanLen);
+                beamGrad.addColorStop(0, 'rgba(0,212,255,0.4)');
+                beamGrad.addColorStop(1, 'rgba(0,212,255,0)');
+                ctx.fillStyle = beamGrad;
+                ctx.fill();
+                ctx.restore();
+
+                // Scan beam edge lines
+                ctx.save();
+                ctx.globalAlpha = 0.15;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(
+                    x + Math.cos(beamAngle - beamSpread) * scanLen,
+                    y + Math.sin(beamAngle - beamSpread) * scanLen
+                );
+                ctx.moveTo(x, y);
+                ctx.lineTo(
+                    x + Math.cos(beamAngle + beamSpread) * scanLen,
+                    y + Math.sin(beamAngle + beamSpread) * scanLen
+                );
+                ctx.strokeStyle = ACCENT;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            function spawnThreat() {
+                const angle = Math.random() * Math.PI * 2;
+                const targetRing = rings[Math.floor(Math.random() * 2)]; // aims for inner rings
+                threats.push({
+                    angle,
+                    dist: maxR * 1.15,
+                    targetDist: maxR * targetRing * (0.3 + Math.random() * 0.3),
+                    speed: 0.2 + Math.random() * 0.35,
+                    size: 3 + Math.random() * 3,
+                    alive: true,
+                    intercepted: false,
+                    trail: []
+                });
+            }
+
+            function spawnInterceptor(threat) {
+                // Find the nearest drone to launch from
+                let bestDrone = null;
+                let bestDist = Infinity;
+                drones.forEach(d => {
+                    const da = Math.abs(d.angle % (Math.PI * 2) - threat.angle % (Math.PI * 2));
+                    if (da < bestDist) { bestDist = da; bestDrone = d; }
+                });
+
+                let startX, startY;
+                if (bestDrone && bestDist < 1.5) {
+                    // Launch from drone position
+                    const orbitR = maxR * rings[bestDrone.ring];
+                    startX = cx + Math.cos(bestDrone.angle) * orbitR;
+                    startY = cy + Math.sin(bestDrone.angle) * orbitR;
+                } else {
+                    const startAngle = threat.angle + (Math.random() - 0.5) * 1.2;
+                    const startDist = maxR * rings[1];
+                    startX = cx + Math.cos(startAngle) * startDist;
+                    startY = cy + Math.sin(startAngle) * startDist;
+                }
+
+                interceptors.push({
+                    x: startX,
+                    y: startY,
+                    target: threat,
+                    speed: 3.5,
+                    alive: true,
+                    trail: []
+                });
+            }
+
+            function spawnExplosion(x, y, color) {
+                for (let i = 0; i < 12; i++) {
+                    const a = (Math.PI * 2 * i) / 12 + Math.random() * 0.3;
+                    const spd = 1 + Math.random() * 2.5;
+                    particles.push({
+                        x, y,
+                        vx: Math.cos(a) * spd,
+                        vy: Math.sin(a) * spd,
+                        life: 1,
+                        decay: 0.015 + Math.random() * 0.02,
+                        color,
+                        size: 1.5 + Math.random() * 2
+                    });
+                }
+            }
+
+            // Scan state
+            let scanAngle = 0;
+            let time = 0;
+            let spawnTimer = 0;
+
+            // Shield hex grid points (precomputed)
+            const hexPoints = [];
+            for (let a = 0; a < Math.PI * 2; a += 0.35) {
+                for (let r = maxR * 0.25; r < maxR * 0.95; r += 28) {
+                    if (Math.random() > 0.6) {
+                        hexPoints.push({ a, r, flicker: Math.random() * Math.PI * 2 });
+                    }
+                }
+            }
+
+            function draw() {
+                time += 0.016;
+                ctx.clearRect(0, 0, W, H);
+
+                // ---- Concentric defense rings ----
+                rings.forEach((r, i) => {
+                    const radius = maxR * r;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = i === 0 ? ACCENT_MED : ACCENT_DIM;
+                    ctx.lineWidth = i === 0 ? 1.2 : 0.6;
+                    ctx.stroke();
+                });
+
+                // ---- Cross-hairs ----
+                for (let i = 0; i < 4; i++) {
+                    const a = (Math.PI / 2) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(cx + Math.cos(a) * maxR * 0.12, cy + Math.sin(a) * maxR * 0.12);
+                    ctx.lineTo(cx + Math.cos(a) * maxR * 0.92, cy + Math.sin(a) * maxR * 0.92);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.06)';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+
+                // ---- Rotating scan sweep ----
+                scanAngle += 0.012;
+                const grad = ctx.createConicalGradient
+                    ? null // not widely supported, use arc fallback
+                    : null;
+
+                // Sweep wedge
+                ctx.save();
+                ctx.globalAlpha = 0.12;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, maxR * 0.92, scanAngle - 0.5, scanAngle, false);
+                ctx.closePath();
+                const sweepGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.92);
+                sweepGrad.addColorStop(0, 'rgba(0,212,255,0)');
+                sweepGrad.addColorStop(0.5, 'rgba(0,212,255,0.25)');
+                sweepGrad.addColorStop(1, 'rgba(0,212,255,0.08)');
+                ctx.fillStyle = sweepGrad;
+                ctx.fill();
+                ctx.restore();
+
+                // Scan line
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(
+                    cx + Math.cos(scanAngle) * maxR * 0.92,
+                    cy + Math.sin(scanAngle) * maxR * 0.92
+                );
+                ctx.strokeStyle = ACCENT;
+                ctx.lineWidth = 1.5;
+                ctx.globalAlpha = 0.6;
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+
+                // ---- Shield hex nodes (ambient) ----
+                hexPoints.forEach(p => {
+                    const brightness = 0.08 + 0.06 * Math.sin(time * 2 + p.flicker);
+                    const px = cx + Math.cos(p.a) * p.r;
+                    const py = cy + Math.sin(p.a) * p.r;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0,212,255,${brightness})`;
+                    ctx.fill();
+                });
+
+                // ---- Center core ----
+                const coreGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.18);
+                coreGlow.addColorStop(0, 'rgba(0,212,255,0.15)');
+                coreGlow.addColorStop(0.5, 'rgba(0,212,255,0.04)');
+                coreGlow.addColorStop(1, 'transparent');
+                ctx.fillStyle = coreGlow;
+                ctx.fillRect(cx - maxR * 0.2, cy - maxR * 0.2, maxR * 0.4, maxR * 0.4);
+
+                // Center dot
+                ctx.beginPath();
+                ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                ctx.fillStyle = ACCENT;
+                ctx.globalAlpha = 0.7 + 0.3 * Math.sin(time * 3);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                // Rotating inner ring detail
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(-scanAngle * 0.6);
+                ctx.beginPath();
+                ctx.arc(0, 0, maxR * 0.15, 0, Math.PI * 1.2);
+                ctx.strokeStyle = ACCENT_MED;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.rotate(Math.PI);
+                ctx.beginPath();
+                ctx.arc(0, 0, maxR * 0.15, 0, Math.PI * 0.8);
+                ctx.stroke();
+                ctx.restore();
+
+                // ---- Patrol Drones ----
+                drones.forEach(d => {
+                    d.angle += d.speed * d.dir;
+                    const orbitR = maxR * rings[d.ring];
+                    const bob = Math.sin(time * 2.5 + d.bobPhase) * 3;
+                    const dx = cx + Math.cos(d.angle) * orbitR;
+                    const dy = cy + Math.sin(d.angle) * orbitR + bob;
+
+                    // Faint orbit trail
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, orbitR, d.angle - d.dir * 0.3, d.angle, d.dir < 0);
+                    ctx.strokeStyle = 'rgba(0,212,255,0.06)';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+
+                    drawDrone(dx, dy, d.angle, d, 10);
+
+                    // Connection line to nearest ring
+                    ctx.save();
+                    ctx.setLineDash([3, 6]);
+                    ctx.beginPath();
+                    ctx.moveTo(dx, dy);
+                    const connR = maxR * rings[Math.max(0, d.ring - 1)];
+                    ctx.lineTo(
+                        cx + Math.cos(d.angle) * connR,
+                        cy + Math.sin(d.angle) * connR
+                    );
+                    ctx.strokeStyle = 'rgba(0,212,255,0.07)';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    ctx.restore();
+                });
+
+                // ---- Spawn threats ----
+                spawnTimer += 0.016;
+                if (spawnTimer > 2.2 + Math.random() * 1.5) {
+                    spawnThreat();
+                    spawnTimer = 0;
+                }
+
+                // ---- Update & draw threats ----
+                threats.forEach(t => {
+                    if (!t.alive) return;
+                    t.dist -= t.speed;
+                    const tx = cx + Math.cos(t.angle) * t.dist;
+                    const ty = cy + Math.sin(t.angle) * t.dist;
+                    t.trail.push({ x: tx, y: ty });
+                    if (t.trail.length > 18) t.trail.shift();
+
+                    // Draw trail
+                    t.trail.forEach((pt, i) => {
+                        ctx.beginPath();
+                        ctx.arc(pt.x, pt.y, t.size * 0.3 * (i / t.trail.length), 0, Math.PI * 2);
+                        ctx.fillStyle = t.intercepted ? `rgba(0,255,136,${0.15 * i / t.trail.length})` : `rgba(255,59,92,${0.2 * i / t.trail.length})`;
+                        ctx.fill();
+                    });
+
+                    // Draw threat dot
+                    ctx.beginPath();
+                    ctx.arc(tx, ty, t.size, 0, Math.PI * 2);
+                    ctx.fillStyle = RED;
+                    ctx.globalAlpha = 0.8 + 0.2 * Math.sin(time * 8);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+
+                    // Threat glow
+                    ctx.beginPath();
+                    ctx.arc(tx, ty, t.size * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = RED_DIM;
+                    ctx.fill();
+
+                    // Trigger interceptor when threat crosses outer ring
+                    if (!t.intercepted && t.dist < maxR * rings[3]) {
+                        t.intercepted = true;
+                        spawnInterceptor(t);
+                    }
+
+                    // Kill if too close to center (shouldn't happen often)
+                    if (t.dist < maxR * 0.1) {
+                        t.alive = false;
+                        spawnExplosion(tx, ty, ACCENT);
+                    }
+                });
+
+                // ---- Update & draw interceptors ----
+                interceptors.forEach(ic => {
+                    if (!ic.alive) return;
+                    const t = ic.target;
+                    const tx = cx + Math.cos(t.angle) * t.dist;
+                    const ty = cy + Math.sin(t.angle) * t.dist;
+                    const dx = tx - ic.x;
+                    const dy = ty - ic.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 8) {
+                        // Hit!
+                        ic.alive = false;
+                        t.alive = false;
+                        spawnExplosion(ic.x, ic.y, GREEN);
+                        // Ring flash at intercept distance
+                        const hitDist = Math.sqrt((ic.x - cx) ** 2 + (ic.y - cy) ** 2);
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, hitDist, 0, Math.PI * 2);
+                        ctx.strokeStyle = 'rgba(0,255,136,0.3)';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    } else {
+                        ic.x += (dx / dist) * ic.speed;
+                        ic.y += (dy / dist) * ic.speed;
+                        ic.trail.push({ x: ic.x, y: ic.y });
+                        if (ic.trail.length > 10) ic.trail.shift();
+
+                        // Draw interceptor trail
+                        ic.trail.forEach((pt, i) => {
+                            ctx.beginPath();
+                            ctx.arc(pt.x, pt.y, 1.2 * (i / ic.trail.length), 0, Math.PI * 2);
+                            ctx.fillStyle = `rgba(0,255,136,${0.3 * i / ic.trail.length})`;
+                            ctx.fill();
+                        });
+
+                        // Draw interceptor
+                        ctx.beginPath();
+                        ctx.arc(ic.x, ic.y, 2.5, 0, Math.PI * 2);
+                        ctx.fillStyle = GREEN;
+                        ctx.fill();
+                    }
+                });
+
+                // ---- Update & draw particles ----
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vx *= 0.97;
+                    p.vy *= 0.97;
+                    p.life -= p.decay;
+
+                    if (p.life > 0) {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.globalAlpha = p.life * 0.8;
+                        ctx.fill();
+                        ctx.globalAlpha = 1;
+                    }
+                });
+
+                // Cleanup dead objects
+                for (let i = threats.length - 1; i >= 0; i--) {
+                    if (!threats[i].alive) threats.splice(i, 1);
+                }
+                for (let i = interceptors.length - 1; i >= 0; i--) {
+                    if (!interceptors[i].alive) interceptors.splice(i, 1);
+                }
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    if (particles[i].life <= 0) particles.splice(i, 1);
+                }
+
+                if (animating) requestAnimationFrame(draw);
+            }
+
+            // Only run when hero is visible (perf)
+            const heroSection = document.getElementById('hero');
+            let animating = false;
+            const heroObserver = new IntersectionObserver(([entry]) => {
+                if (entry.isIntersecting && !animating) {
+                    animating = true;
+                    requestAnimationFrame(draw);
+                } else if (!entry.isIntersecting) {
+                    animating = false;
+                }
+            }, { threshold: 0.05 });
+            heroObserver.observe(heroSection);
+        })();
+
+        // ═══════════════════════════════════════════════════
+        // HERO VIDEO REEL — Cinematic crossfade sequence
+        // ═══════════════════════════════════════════════════
+        (function () {
+            const reel = document.getElementById('heroVideoReel');
+            if (!reel) return;
+            const videos = reel.querySelectorAll('video');
+            const pips = document.querySelectorAll('#heroVideoPips .pip');
+            const CLIP_DURATION = 6000; // ms per clip
+            let current = 0;
+            let progressRAF = null;
+            let clipStart = 0;
+
+            function activateClip(index) {
+                videos.forEach((v, i) => {
+                    if (i === index) {
+                        v.currentTime = 0;
+                        v.play().catch(() => {});
+                        v.classList.add('active');
+                    } else {
+                        v.classList.remove('active');
+                        // Pause after fade-out transition
+                        setTimeout(() => { if (!v.classList.contains('active')) v.pause(); }, 2000);
+                    }
+                });
+                pips.forEach((p, i) => {
+                    const fill = p.querySelector('.pip-fill');
+                    if (i < index) {
+                        fill.style.transition = 'none';
+                        fill.style.width = '100%';
+                    } else if (i === index) {
+                        fill.style.transition = 'none';
+                        fill.style.width = '0%';
+                    } else {
+                        fill.style.transition = 'none';
+                        fill.style.width = '0%';
+                    }
+                });
+                clipStart = performance.now();
+                animateProgress(index);
+            }
+
+            function animateProgress(index) {
+                if (progressRAF) cancelAnimationFrame(progressRAF);
+                function tick() {
+                    const elapsed = performance.now() - clipStart;
+                    const pct = Math.min((elapsed / CLIP_DURATION) * 100, 100);
+                    const fill = pips[index]?.querySelector('.pip-fill');
+                    if (fill) {
+                        fill.style.transition = 'none';
+                        fill.style.width = pct + '%';
+                    }
+                    if (pct < 100) {
+                        progressRAF = requestAnimationFrame(tick);
+                    } else {
+                        // Next clip
+                        current = (current + 1) % videos.length;
+                        activateClip(current);
+                    }
+                }
+                progressRAF = requestAnimationFrame(tick);
+            }
+
+            // Start first clip once it can play
+            videos[0].addEventListener('canplay', () => activateClip(0), { once: true });
+            videos[0].load();
+            // Fallback if canplay already fired
+            if (videos[0].readyState >= 3) activateClip(0);
+        })();
+    </script>
+</body>
+</html>
