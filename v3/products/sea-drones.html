@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sea Drones - Northwatch Technologies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #FFFFFF;
+            color: #000000;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        ::selection { background: #9DFF20; color: #000; }
+
+        nav {
+            position: static;
+            padding: 0 clamp(1.5rem, 4vw, 4rem);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #E5E5E5;
+            background: #FFFFFF;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #000;
+        }
+        .nav-logo svg { width: 32px; height: 32px; }
+        .nav-logo-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+        .nav-links a:hover { opacity: 1; }
+        .nav-cta {
+            padding: 10px 24px;
+            background: #9DFF20;
+            color: #000 !important;
+            font-weight: 700;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.09em !important;
+            text-transform: uppercase;
+            border-radius: 0;
+            opacity: 1 !important;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .nav-cta:hover { background: #000; color: #fff !important; }
+        .mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+        .mobile-toggle span { width: 24px; height: 1.5px; background: #000; transition: all 0.3s; }
+
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 6rem) clamp(1.5rem, 4vw, 4rem);
+            padding-top: clamp(4rem, 8vw, 8rem);
+        }
+        .hero-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.032rem, 2.032rem + ((1vw - 0.2rem) * 2.896), 3.625rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            max-width: 650px;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+            font-weight: 400;
+            color: #000;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            max-width: 550px;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            max-width: 520px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: #9DFF20;
+            color: #000;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .btn-primary:hover { background: #000; color: #fff; }
+        .btn-primary:active { background: #345C00; color: #fff; }
+
+        .section-padding { padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 4vw, 4rem); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: clamp(2.625rem, calc(2.625rem + ((1vw - 0.48rem) * 8.4135)), 3.25rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .section-desc {
+            font-size: 1rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .specs-section { background: #F6F6F6; }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .spec-card {
+            background: #FFFFFF;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            box-shadow: 6px 6px 9px rgba(0,0,0,0.2);
+        }
+        .spec-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+        .spec-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: #292e3a;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+        }
+        .spec-desc {
+            font-size: 0.88rem;
+            color: #000;
+            opacity: 0.5;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .capability-item {
+            padding: 2rem 0;
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .capability-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .capability-desc {
+            font-size: 0.92rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+        }
+
+        .use-cases-section { background: #F6F6F6; }
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .use-case-card {
+            background: #FFFFFF;
+            padding: 2rem;
+            box-shadow: 6px 6px 9px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .use-case-card:hover { transform: translateY(-4px); }
+        .use-case-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1.25rem;
+            color: #000;
+            opacity: 0.7;
+        }
+        .use-case-title {
+            font-weight: 500;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+        .use-case-desc {
+            font-size: 0.85rem;
+            color: #000;
+            opacity: 0.5;
+            line-height: 1.6;
+        }
+
+        .cta-section { text-align: center; background: #FFFFFF; }
+        .cta-title {
+            font-size: clamp(2.625rem, calc(2.625rem + ((1vw - 0.48rem) * 8.4135)), 3.25rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .cta-desc {
+            color: #000;
+            opacity: 0.6;
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+        }
+
+        footer { border-top: 1px solid #E5E5E5; }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-brand p { color: #000; opacity: 0.4; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; max-width: 280px; }
+        .footer-col-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .footer-col a { display: block; color: #000; opacity: 0.4; text-decoration: none; font-size: 0.88rem; margin-bottom: 0.8rem; transition: opacity 0.3s ease; }
+        .footer-col a:hover { opacity: 1; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem clamp(1.5rem, 4vw, 4rem);
+            border-top: 1px solid #E5E5E5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #000;
+            opacity: 0.4;
+        }
+        .footer-bottom-links { display: flex; gap: 2rem; }
+        .footer-bottom-links a { color: #000; text-decoration: none; transition: opacity 0.3s ease; opacity: 0.6; }
+        .footer-bottom-links a:hover { opacity: 1; }
+
+        @media (max-width: 1024px) {
+            .specs-grid { grid-template-columns: repeat(2, 1fr); }
+            .use-cases-grid { grid-template-columns: repeat(2, 1fr); }
+            .capabilities-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: flex; }
+            .specs-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="../index.html" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="#000" stroke-width="1.5" fill="none"/>
+                <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#9DFF20" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M18 13v10M13 16l5 3 5-3" stroke="#9DFF20" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-logo-text">Northwatch</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="../index.html#products">Products</a></li>
+            <li><a href="../index.html#technology">Technology</a></li>
+            <li><a href="../index.html#mission">Mission</a></li>
+            <li><a href="../index.html#partners">Partners</a></li>
+            <li><a href="../index.html#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Naval vessel on open ocean">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-label">Maritime Autonomous Platform</div>
+            <h1>Sea Drones</h1>
+            <p class="hero-subtitle">Unmanned Dominance from Surface to Seabed.</p>
+            <p class="hero-desc">Maritime autonomous platforms spanning surface patrol vessels to submarine-launched undersea vehicles. Modular mission bays for ISR, electronic warfare, and torpedo deployment across the full maritime battlespace.</p>
+            <a href="../index.html#contact" class="btn-primary">Request Briefing</a>
+        </div>
+    </section>
+
+    <section class="specs-section section-padding">
+        <div class="container">
+            <div class="section-label">Key Specifications</div>
+            <h2 class="section-title">Full-Spectrum Maritime Autonomy</h2>
+            <p class="section-desc">Surface and subsurface platforms designed for extended autonomous operations in the harshest maritime environments.</p>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-value">90+ Days</div>
+                    <div class="spec-label">USV Endurance</div>
+                    <p class="spec-desc">Ultra-long duration surface patrol with hybrid propulsion and autonomous mission management for persistent maritime presence.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Modular</div>
+                    <div class="spec-label">Weapons Bays</div>
+                    <p class="spec-desc">Reconfigurable mission bays supporting torpedoes, mines, EW payloads, and ISR sensor packages for multi-role operations.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Hull Sonar</div>
+                    <div class="spec-label">+ Towed Array</div>
+                    <p class="spec-desc">Integrated hull-mounted active sonar and variable-depth towed array for submarine detection and tracking at range.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Hybrid</div>
+                    <div class="spec-label">Diesel-Electric + Solar</div>
+                    <p class="spec-desc">Multi-mode propulsion combining diesel-electric with solar supplement for silent running and extended endurance.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Sea State 6</div>
+                    <div class="spec-label">Operational Capability</div>
+                    <p class="spec-desc">All-weather operation in high sea states with active stabilization and autonomous damage control systems.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">COLREGS</div>
+                    <div class="spec-label">Autonomous Navigation</div>
+                    <p class="spec-desc">Full compliance with international maritime collision regulations through AI-powered vessel traffic awareness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-label">Core Capabilities</div>
+            <h2 class="section-title">Maritime Domain Control</h2>
+            <div class="capabilities-grid">
+                <div class="capability-item">
+                    <div class="capability-title">Extended Autonomous Endurance</div>
+                    <div class="capability-desc">Hybrid diesel-electric propulsion with solar supplement enables 90+ day autonomous patrols without resupply, providing persistent maritime domain awareness.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Integrated ASW Suite</div>
+                    <div class="capability-desc">Hull-mounted active sonar paired with variable-depth towed array delivers comprehensive submarine detection, classification, and tracking capability.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Multi-Role Mission Bays</div>
+                    <div class="capability-desc">Modular weapons and sensor bays enable rapid reconfiguration between ASW, mine countermeasures, ISR, and electronic warfare missions.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Autonomous Maritime Navigation</div>
+                    <div class="capability-desc">AI-powered COLREGS-compliant navigation with vessel traffic awareness, enabling safe autonomous operation in congested shipping lanes.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases-section section-padding">
+        <div class="container">
+            <div class="section-label">Operational Applications</div>
+            <h2 class="section-title">Maritime Domain Superiority</h2>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><line x1="2" y1="12" x2="22" y2="12"/>
+                    </svg>
+                    <div class="use-case-title">Anti-Submarine Warfare</div>
+                    <p class="use-case-desc">Persistent ASW barrier patrols with integrated sonar systems for submarine detection, classification, and tracking.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <div class="use-case-title">Mine Countermeasures</div>
+                    <p class="use-case-desc">Autonomous mine detection, identification, and neutralization without risking manned vessels in hazardous waters.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <div class="use-case-title">Port Security</div>
+                    <p class="use-case-desc">Autonomous harbor patrol and underwater hull inspection for naval bases and critical maritime infrastructure.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                    <div class="use-case-title">Oceanographic Survey</div>
+                    <p class="use-case-desc">Extended-duration hydrographic and oceanographic data collection for naval planning and scientific research.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section section-padding">
+        <div class="container">
+            <h2 class="cta-title">Command the Maritime Domain</h2>
+            <p class="cta-desc">Engage our maritime systems team for a fleet architecture assessment and autonomous vessel capability demonstration.</p>
+            <a href="../index.html#contact" class="btn-primary">Schedule a Demonstration</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="../index.html" class="nav-logo" style="margin-bottom: 0.5rem;">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                        <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="#000" stroke-width="1.5" fill="none"/>
+                        <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#9DFF20" stroke-width="1" fill="none" opacity="0.6"/>
+                        <path d="M18 13v10M13 16l5 3 5-3" stroke="#9DFF20" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-logo-text">Northwatch</span>
+                </a>
+                <p>Autonomous defense systems built on the principle that protection -- not aggression -- is the foundation of lasting security.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Systems</div>
+                <a href="payload-transport.html">Payload Transport</a>
+                <a href="drone-defense.html">Drone Defense</a>
+                <a href="jamming-systems.html">Jamming Systems</a>
+                <a href="autonomous-drones.html">Autonomous Drones</a>
+                <a href="surveillance-drones.html">Surveillance Drones</a>
+                <a href="sea-drones.html">Sea Drones</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <a href="../index.html#mission">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Newsroom</a>
+                <a href="#">Ethics</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Resources</div>
+                <a href="#">Documentation</a>
+                <a href="#">White Papers</a>
+                <a href="#">Case Studies</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Northwatch Technologies, Inc. All rights reserved.</span>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

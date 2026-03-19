@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Jamming Technology - Northwatch Technologies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #FFFFFF;
+            color: #000000;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+        ::selection { background: #9DFF20; color: #000; }
+
+        nav {
+            position: static;
+            padding: 0 clamp(1.5rem, 4vw, 4rem);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #E5E5E5;
+            background: #FFFFFF;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #000;
+        }
+        .nav-logo svg { width: 32px; height: 32px; }
+        .nav-logo-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #000;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+        .nav-links a:hover { opacity: 1; }
+        .nav-cta {
+            padding: 10px 24px;
+            background: #9DFF20;
+            color: #000 !important;
+            font-weight: 700;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.09em !important;
+            text-transform: uppercase;
+            border-radius: 0;
+            opacity: 1 !important;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .nav-cta:hover { background: #000; color: #fff !important; }
+        .mobile-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 8px; }
+        .mobile-toggle span { width: 24px; height: 1.5px; background: #000; transition: all 0.3s; }
+
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.4) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 6rem) clamp(1.5rem, 4vw, 4rem);
+            padding-top: clamp(4rem, 8vw, 8rem);
+        }
+        .hero-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.032rem, 2.032rem + ((1vw - 0.2rem) * 2.896), 3.625rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            max-width: 650px;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+            font-weight: 400;
+            color: #000;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            max-width: 550px;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            max-width: 520px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: #9DFF20;
+            color: #000;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .btn-primary:hover { background: #000; color: #fff; }
+        .btn-primary:active { background: #345C00; color: #fff; }
+
+        .section-padding { padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 4vw, 4rem); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.10em;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            font-size: clamp(2.625rem, calc(2.625rem + ((1vw - 0.48rem) * 8.4135)), 3.25rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .section-desc {
+            font-size: 1rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .specs-section { background: #F6F6F6; }
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .spec-card {
+            background: #FFFFFF;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            box-shadow: 6px 6px 9px rgba(0,0,0,0.2);
+        }
+        .spec-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+        .spec-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: #292e3a;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+        }
+        .spec-desc {
+            font-size: 0.88rem;
+            color: #000;
+            opacity: 0.5;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .capability-item {
+            padding: 2rem 0;
+            border-bottom: 1px solid #E5E5E5;
+        }
+        .capability-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .capability-desc {
+            font-size: 0.92rem;
+            color: #000;
+            opacity: 0.6;
+            line-height: 1.7;
+        }
+
+        .use-cases-section { background: #F6F6F6; }
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .use-case-card {
+            background: #FFFFFF;
+            padding: 2rem;
+            box-shadow: 6px 6px 9px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        .use-case-card:hover { transform: translateY(-4px); }
+        .use-case-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1.25rem;
+            color: #000;
+            opacity: 0.7;
+        }
+        .use-case-title {
+            font-weight: 500;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+        .use-case-desc {
+            font-size: 0.85rem;
+            color: #000;
+            opacity: 0.5;
+            line-height: 1.6;
+        }
+
+        .cta-section { text-align: center; background: #FFFFFF; }
+        .cta-title {
+            font-size: clamp(2.625rem, calc(2.625rem + ((1vw - 0.48rem) * 8.4135)), 3.25rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .cta-desc {
+            color: #000;
+            opacity: 0.6;
+            font-size: 1rem;
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+        }
+
+        footer { border-top: 1px solid #E5E5E5; }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 4rem);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-brand p { color: #000; opacity: 0.4; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; max-width: 280px; }
+        .footer-col-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: #292e3a;
+            margin-bottom: 1.5rem;
+        }
+        .footer-col a { display: block; color: #000; opacity: 0.4; text-decoration: none; font-size: 0.88rem; margin-bottom: 0.8rem; transition: opacity 0.3s ease; }
+        .footer-col a:hover { opacity: 1; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem clamp(1.5rem, 4vw, 4rem);
+            border-top: 1px solid #E5E5E5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #000;
+            opacity: 0.4;
+        }
+        .footer-bottom-links { display: flex; gap: 2rem; }
+        .footer-bottom-links a { color: #000; text-decoration: none; transition: opacity 0.3s ease; opacity: 0.6; }
+        .footer-bottom-links a:hover { opacity: 1; }
+
+        @media (max-width: 1024px) {
+            .specs-grid { grid-template-columns: repeat(2, 1fr); }
+            .use-cases-grid { grid-template-columns: repeat(2, 1fr); }
+            .capabilities-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-toggle { display: flex; }
+            .specs-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="../index.html" class="nav-logo">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="#000" stroke-width="1.5" fill="none"/>
+                <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#9DFF20" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M18 13v10M13 16l5 3 5-3" stroke="#9DFF20" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="nav-logo-text">Northwatch</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="../index.html#products">Products</a></li>
+            <li><a href="../index.html#technology">Technology</a></li>
+            <li><a href="../index.html#mission">Mission</a></li>
+            <li><a href="../index.html#partners">Partners</a></li>
+            <li><a href="../index.html#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80" alt="Electronic circuit board technology">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-label">Electronic Warfare Suite</div>
+            <h1>Drone Jamming Technology</h1>
+            <p class="hero-subtitle">Deny the Signal. Own the Spectrum.</p>
+            <p class="hero-desc">Electronic warfare suites delivering precision spectrum dominance through adaptive multiband RF jamming, GNSS denial, and cognitive electronic attack. Deny adversary command links while preserving friendly communications.</p>
+            <a href="../index.html#contact" class="btn-primary">Request Briefing</a>
+        </div>
+    </section>
+
+    <section class="specs-section section-padding">
+        <div class="container">
+            <div class="section-label">Key Specifications</div>
+            <h2 class="section-title">Precision Spectrum Dominance</h2>
+            <p class="section-desc">AI-driven cognitive electronic warfare that adapts in real-time to the electromagnetic environment.</p>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="spec-value">400MHz-6GHz</div>
+                    <div class="spec-label">Multiband Coverage</div>
+                    <p class="spec-desc">Wideband jamming capability spanning all commercial and military drone control frequencies.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">4-System</div>
+                    <div class="spec-label">GNSS Denial</div>
+                    <p class="spec-desc">Simultaneous GPS, GLONASS, Galileo, and BeiDou spoofing and denial across all satellite navigation bands.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">AI-Driven</div>
+                    <div class="spec-label">Spectrum Sensing</div>
+                    <p class="spec-desc">Cognitive electronic attack with real-time signal classification and adaptive jamming waveform generation.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">2km+</div>
+                    <div class="spec-label">HPM Disruption Range</div>
+                    <p class="spec-desc">High-power microwave disruption capability for hard-kill electronic defeat of drone avionics systems.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Surgical</div>
+                    <div class="spec-label">Precision Targeting</div>
+                    <p class="spec-desc">Narrow-beam directional jamming preserves friendly comms while denying adversary command links.</p>
+                </div>
+                <div class="spec-card">
+                    <div class="spec-value">Real-Time</div>
+                    <div class="spec-label">Threat Adaptation</div>
+                    <p class="spec-desc">Millisecond-level waveform adaptation to counter frequency-hopping and spread-spectrum evasion techniques.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-label">Core Capabilities</div>
+            <h2 class="section-title">Cognitive Electronic Attack</h2>
+            <div class="capabilities-grid">
+                <div class="capability-item">
+                    <div class="capability-title">Adaptive Waveform Generation</div>
+                    <div class="capability-desc">AI-driven cognitive electronic attack generates custom jamming waveforms in real time, adapting to frequency-hopping and spread-spectrum evasion techniques.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Surgical Spectrum Denial</div>
+                    <div class="capability-desc">Narrow-beam directional jamming precisely targets adversary command links while preserving friendly communications across the full operational band.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Multi-Constellation GNSS Denial</div>
+                    <div class="capability-desc">Simultaneous spoofing and denial across GPS, GLONASS, Galileo, and BeiDou systems, denying satellite navigation to hostile platforms.</div>
+                </div>
+                <div class="capability-item">
+                    <div class="capability-title">Passive Intelligence Collection</div>
+                    <div class="capability-desc">SIGINT-capable signal intelligence collection and analysis mode before transitioning to active jamming engagement for maximum tactical advantage.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases-section section-padding">
+        <div class="container">
+            <div class="section-label">Operational Applications</div>
+            <h2 class="section-title">Electromagnetic Superiority</h2>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                    </svg>
+                    <div class="use-case-title">Airspace Denial</div>
+                    <p class="use-case-desc">Create impenetrable electromagnetic exclusion zones that render hostile drones inoperable over defined areas.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    <div class="use-case-title">SIGINT Operations</div>
+                    <p class="use-case-desc">Passive signal intelligence collection and analysis before transitioning to active jamming engagement.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    <div class="use-case-title">Counter-Swarm Defense</div>
+                    <p class="use-case-desc">Simultaneous multi-target jamming to disrupt swarm coordination protocols and mesh networking.</p>
+                </div>
+                <div class="use-case-card">
+                    <svg class="use-case-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>
+                    </svg>
+                    <div class="use-case-title">Perimeter Security</div>
+                    <p class="use-case-desc">Persistent electromagnetic barrier around high-value installations with automated threat response.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section section-padding">
+        <div class="container">
+            <h2 class="cta-title">Own the Electromagnetic Battlespace</h2>
+            <p class="cta-desc">Engage our electronic warfare specialists for a spectrum threat assessment and tailored EW solution architecture.</p>
+            <a href="../index.html#contact" class="btn-primary">Schedule a Demonstration</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="../index.html" class="nav-logo" style="margin-bottom: 0.5rem;">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+                        <path d="M18 2L4 10v16l14 8 14-8V10L18 2z" stroke="#000" stroke-width="1.5" fill="none"/>
+                        <path d="M18 6L8 12v12l10 6 10-6V12L18 6z" stroke="#9DFF20" stroke-width="1" fill="none" opacity="0.6"/>
+                        <path d="M18 13v10M13 16l5 3 5-3" stroke="#9DFF20" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="nav-logo-text">Northwatch</span>
+                </a>
+                <p>Autonomous defense systems built on the principle that protection -- not aggression -- is the foundation of lasting security.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Systems</div>
+                <a href="payload-transport.html">Payload Transport</a>
+                <a href="drone-defense.html">Drone Defense</a>
+                <a href="jamming-systems.html">Jamming Systems</a>
+                <a href="autonomous-drones.html">Autonomous Drones</a>
+                <a href="surveillance-drones.html">Surveillance Drones</a>
+                <a href="sea-drones.html">Sea Drones</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <a href="../index.html#mission">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Newsroom</a>
+                <a href="#">Ethics</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Resources</div>
+                <a href="#">Documentation</a>
+                <a href="#">White Papers</a>
+                <a href="#">Case Studies</a>
+                <a href="#">Blog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Northwatch Technologies, Inc. All rights reserved.</span>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
